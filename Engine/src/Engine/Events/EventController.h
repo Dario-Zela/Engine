@@ -1,9 +1,7 @@
 #pragma once
 
-#include "../Core.h"
-
-#include <functional>
-#include <string>
+#include "ENPH.h"
+#include "Engine/Core.h"
 
 namespace Engine 
 {
@@ -14,8 +12,8 @@ namespace Engine
 	enum class EventType
 	{
 		Undefinded = 0,
-		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-		AppTick, AppUpdate, AppRenderer,
+		WindowClosed, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
+		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
@@ -45,10 +43,10 @@ namespace Engine
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
-		inline bool IsInCategory(EventCategory category) { return GetCategoryFlags() & category; }
-
+		inline bool IsInCategory(EventCategory category) const { return GetCategoryFlags() & category; }
+		inline bool IsHandled() const { return eHandled; }
 	protected:
-		bool mHandled = false;
+		bool eHandled = false;
 	};
 
 	class EventDispatcher
@@ -56,11 +54,25 @@ namespace Engine
 		template<typename T>
 		using EventFn = std::function<bool(T&)>;
 	public:
-		EventDispatcher(Event& event);
-		//~EventDispatcher();
+		EventDispatcher(Event& event) 
+			:dEvent(event)
+		{
+		}
+		
+		template<typename T>
+		bool Dispatch(EventFn<T> func) 
+		{
+			if (dEvent.GetEventType() == T::GetStaticType()) 
+			{
+				dEvent.eHandled = func(*(T*)&dEvent);
+				return true;
+			}
+			return false;
+		}
 
 	private:
-
+		Event& dEvent;
 	};
 
+	inline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
 }

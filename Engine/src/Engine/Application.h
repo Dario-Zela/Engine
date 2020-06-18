@@ -2,6 +2,11 @@
 
 #include "Core.h"
 
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Events/EventController.h"
+#include "Engine/LayerStack.h"
+#include "Window.h"
+
 namespace Engine 
 {
 	class ENGINE_API Application
@@ -9,7 +14,17 @@ namespace Engine
 	public:
 		Application();
 		virtual ~Application();
+
+		void OnEvent(Event& e);
 		void Run();
+
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
+	private:
+		bool OnWindowClosed(WindowClosedEvent& e);
+		std::unique_ptr<Window> aWindow;
+		bool aRunning = true;
+		LayerStack aLayerStack;
 	};
 
 	// This linkes the game code to the engine and should be defined where it is used
