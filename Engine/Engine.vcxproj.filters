@@ -7,6 +7,12 @@
     <Filter Include="Engine\Events">
       <UniqueIdentifier>{5FAFB439-CB6F-3070-94AA-79ED002A754C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ImGUI">
+      <UniqueIdentifier>{05716795-F1D3-F639-9A59-2FF0869BC2BC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{8A864AC8-7628-759E-5FE3-88F24B24FCEE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="WindowImp">
       <UniqueIdentifier>{23624C74-8FCC-00EB-D80A-B29044B4DE3F}</UniqueIdentifier>
     </Filter>
@@ -35,6 +41,9 @@
     <ClInclude Include="src\Engine\Events\MouseEvent.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\ImGUI\ImGUILayer.h">
+      <Filter>Engine\ImGUI</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Layer.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -47,6 +56,9 @@
     <ClInclude Include="src\Engine\Window.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\OpenGL\ImGUIOpengl3Renderer.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\WindowImp\WindowsWindow.h">
       <Filter>WindowImp</Filter>
     </ClInclude>
@@ -56,6 +68,9 @@
     <ClCompile Include="src\Engine\Application.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\ImGUI\ImGUILayer.cpp">
+      <Filter>Engine\ImGUI</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Layer.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -64,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Log.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL\ImGUIOpengl3Renderer.cpp">
+      <Filter>OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowImp\WindowsWindow.cpp">
       <Filter>WindowImp</Filter>

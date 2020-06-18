@@ -1,6 +1,7 @@
 workspace "Engine"
 	architecture "x64"
-
+	startproject "Tester"
+	
 	configurations
 	{
 		"Debug",
@@ -13,9 +14,14 @@ outputdir = "%{cfg.buildcfg}-x64"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Engine/vendor/GLAD/include"
+IncludeDir["ImGUI"] = "Engine/vendor/ImGUI"
 
+group "Dependencies"
 include "Engine/vendor/GLFW"
 include "Engine/vendor/GLAD"
+include "Engine/vendor/ImGUI"
+group ""
+
 project "Engine"
 	
 	location "Engine"
@@ -39,18 +45,20 @@ project "Engine"
 		"%{prj.name}/src",
 		"%{prj.name}/Vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}"
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.ImGUI}"
 	}
 
 	links
 	{
+		"ImGUI",
 		"GLAD",
 		"GLFW",
 		"opengl32.lib"
 	}
 
 	cppdialect "C++17"
-	staticruntime "On"
+	staticruntime "Off"
 	systemversion "latest"
 
 
@@ -62,21 +70,21 @@ project "Engine"
 
 	postbuildcommands
 	{
-		"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Tester"
+		"{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Tester/\""
 	}
 	filter "configurations:Debug"
 		defines "EN_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EN_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EN_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 project "Tester"
@@ -105,24 +113,25 @@ project "Tester"
 	}
 
 	cppdialect "C++17"
-	staticruntime "On"
+	staticruntime "Off"
 	systemversion "latest"
 
 	defines
 	{
+
 	}
 
 	filter "configurations:Debug"
 		defines "EN_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EN_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EN_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"

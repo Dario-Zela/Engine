@@ -39,7 +39,7 @@ namespace Engine
 		if (!sGLFWInitialised)
 		{
 			int Success = glfwInit();
-			HZ_CORE_ASSERT(Success, "Could not initialise GLFW");
+			EN_CORE_ASSERT(Success, "Could not initialise GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			sGLFWInitialised = true;
 		}
@@ -47,7 +47,7 @@ namespace Engine
 		wWindow = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(wWindow);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		HZ_CORE_ASSERT(status, "Failed to Initialise OpenGL");
+		EN_CORE_ASSERT(status, "Failed to Initialise OpenGL");
 		glfwSetWindowUserPointer(wWindow, &wData);
 		SetVSync(true);
 
@@ -68,6 +68,12 @@ namespace Engine
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				WindowClosedEvent event;
+				data.EventCallback(event);
+			});
+		glfwSetCharCallback(wWindow, [](GLFWwindow* window, unsigned int keycode)
+			{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				KeyTypedEvent event(keycode);
 				data.EventCallback(event);
 			});
 		glfwSetKeyCallback(wWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)

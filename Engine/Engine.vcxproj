@@ -80,11 +80,10 @@
       <PrecompiledHeaderFile>ENPH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EN_BUILD_DLL;GLFW_INCLUDE_NONE;EN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -94,7 +93,7 @@
       <ImportLibrary>..\bin\Debug-x64\Engine\Engine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-x64\Engine\Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-x64\Engine\Engine.dll ..\bin\Debug-x64\Tester &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-x64\Engine\Engine.dll ..\bin\Debug-x64\Tester &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-x64\Engine\Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-x64\Engine\Engine.dll "..\bin\Debug-x64\Tester\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-x64\Engine\Engine.dll "..\bin\Debug-x64\Tester\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -103,14 +102,13 @@
       <PrecompiledHeaderFile>ENPH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EN_BUILD_DLL;GLFW_INCLUDE_NONE;EN_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -121,7 +119,7 @@
       <ImportLibrary>..\bin\Release-x64\Engine\Engine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-x64\Engine\Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-x64\Engine\Engine.dll ..\bin\Release-x64\Tester &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x64\Engine\Engine.dll ..\bin\Release-x64\Tester &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-x64\Engine\Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-x64\Engine\Engine.dll "..\bin\Release-x64\Tester\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x64\Engine\Engine.dll "..\bin\Release-x64\Tester\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -130,14 +128,13 @@
       <PrecompiledHeaderFile>ENPH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EN_BUILD_DLL;GLFW_INCLUDE_NONE;EN_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -148,7 +145,7 @@
       <ImportLibrary>..\bin\Dist-x64\Engine\Engine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Dist-x64\Engine\Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-x64\Engine\Engine.dll ..\bin\Dist-x64\Tester &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-x64\Engine\Engine.dll ..\bin\Dist-x64\Tester &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Dist-x64\Engine\Engine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-x64\Engine\Engine.dll "..\bin\Dist-x64\Tester\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-x64\Engine\Engine.dll "..\bin\Dist-x64\Tester\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -161,10 +158,12 @@
     <ClInclude Include="src\Engine\Events\EventController.h" />
     <ClInclude Include="src\Engine\Events\KeyEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
+    <ClInclude Include="src\Engine\ImGUI\ImGUILayer.h" />
     <ClInclude Include="src\Engine\Layer.h" />
     <ClInclude Include="src\Engine\LayerStack.h" />
     <ClInclude Include="src\Engine\Log.h" />
     <ClInclude Include="src\Engine\Window.h" />
+    <ClInclude Include="src\OpenGL\ImGUIOpengl3Renderer.h" />
     <ClInclude Include="src\WindowImp\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,12 +171,17 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Engine\Application.cpp" />
+    <ClCompile Include="src\Engine\ImGUI\ImGUILayer.cpp" />
     <ClCompile Include="src\Engine\Layer.cpp" />
     <ClCompile Include="src\Engine\LayerStack.cpp" />
     <ClCompile Include="src\Engine\Log.cpp" />
+    <ClCompile Include="src\OpenGL\ImGUIOpengl3Renderer.cpp" />
     <ClCompile Include="src\WindowImp\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="vendor\ImGUI\ImGUI.vcxproj">
+      <Project>{80FB640D-EC0F-8DBE-B591-301E216589EF}</Project>
+    </ProjectReference>
     <ProjectReference Include="vendor\GLAD\GLAD.vcxproj">
       <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
     </ProjectReference>

@@ -3,7 +3,7 @@
 
 namespace Engine
 { 
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+	Application* Application::sInstance = nullptr;
 
 	bool Application::OnWindowClosed(WindowClosedEvent& e)
 	{
@@ -13,8 +13,10 @@ namespace Engine
 
 	Application::Application() 
 	{
+		EN_CORE_ASSERT(!sInstance, "Application already exists");
+		sInstance = this;
 		aWindow = std::unique_ptr<Window>(Window::Create());
-		aWindow->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		aWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
 	}
 
 	Application::~Application()
@@ -25,7 +27,7 @@ namespace Engine
 	void Application::OnEvent(Event& e) 
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(OnWindowClosed));
+		dispatcher.Dispatch<WindowClosedEvent>(EN_BIND_EVENT_FN(Application::OnWindowClosed));
 
 		EN_CORE_TRACE("{0}", e);
 

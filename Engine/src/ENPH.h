@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "Engine/Log.h"
+#include "Engine/Core.h"
 
 #include <iostream>
 #include <functional>
