@@ -23,7 +23,6 @@ public:
 	Tester() 
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Engine::ImGUILayer());
 	}
 	~Tester() 
 	{

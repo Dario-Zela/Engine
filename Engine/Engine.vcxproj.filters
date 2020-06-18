@@ -65,9 +65,6 @@
     <ClInclude Include="src\Engine\Window.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\OpenGL\ImGUIOpengl3Renderer.h">
-      <Filter>OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\WindowImp\WindowsInput.h">
       <Filter>WindowImp</Filter>
     </ClInclude>
@@ -92,14 +89,12 @@
     <ClCompile Include="src\Engine\Log.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\OpenGL\ImGUIOpengl3Renderer.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\WindowImp\WindowsInput.cpp">
       <Filter>WindowImp</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowImp\WindowsWindow.cpp">
       <Filter>WindowImp</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\ImGUI\ImGUIBuild.cpp" />
   </ItemGroup>
 </Project>

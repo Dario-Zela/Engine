@@ -166,11 +166,11 @@
     <ClInclude Include="src\Engine\Log.h" />
     <ClInclude Include="src\Engine\MouseCodes.h" />
     <ClInclude Include="src\Engine\Window.h" />
-    <ClInclude Include="src\OpenGL\ImGUIOpengl3Renderer.h" />
     <ClInclude Include="src\WindowImp\WindowsInput.h" />
     <ClInclude Include="src\WindowImp\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\ImGUI\ImGUIBuild.cpp" />
     <ClCompile Include="src\ENPH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -179,7 +179,6 @@
     <ClCompile Include="src\Engine\Layer.cpp" />
     <ClCompile Include="src\Engine\LayerStack.cpp" />
     <ClCompile Include="src\Engine\Log.cpp" />
-    <ClCompile Include="src\OpenGL\ImGUIOpengl3Renderer.cpp" />
     <ClCompile Include="src\WindowImp\WindowsInput.cpp" />
     <ClCompile Include="src\WindowImp\WindowsWindow.cpp" />
   </ItemGroup>

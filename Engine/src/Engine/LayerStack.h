@@ -21,6 +21,6 @@ namespace Engine
 
 	private:
 		std::vector<Layer*> lLayers;
-		std::vector<Layer*>::iterator lLayerInsert;
+		unsigned int lLayerInsertIndex = 0;
 	};
 }

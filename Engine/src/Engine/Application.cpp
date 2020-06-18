@@ -19,6 +19,9 @@ namespace Engine
 		sInstance = this;
 		aWindow = std::unique_ptr<Window>(Window::Create());
 		aWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
+
+		aImGUILayer = new ImGUILayer();
+		aLayerStack.PushOverlay(aImGUILayer);
 	}
 
 	Application::~Application()
@@ -52,6 +55,13 @@ namespace Engine
 				layer->OnUpdate();
 			}
 			aWindow->OnUpdate();
+
+			aImGUILayer->Begin();
+			for (Layer* layer : aLayerStack)
+			{
+				layer->OnImGUIRender();
+			}
+			aImGUILayer->End();
 
 			auto [x, y] = Input::GetMousePosition();
 			EN_CORE_TRACE("{0}, {1}", x, y);
