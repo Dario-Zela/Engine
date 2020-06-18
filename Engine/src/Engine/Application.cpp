@@ -1,5 +1,7 @@
 #include "ENPH.h"
+#include "glad/glad.h"
 #include "Application.h"
+#include "Input.h"
 
 namespace Engine
 { 
@@ -43,11 +45,16 @@ namespace Engine
 	{
 		while (aRunning)
 		{
+			glClear(GL_COLOR_BUFFER_BIT);
+
 			for (Layer* layer : aLayerStack)
 			{
 				layer->OnUpdate();
 			}
 			aWindow->OnUpdate();
+
+			auto [x, y] = Input::GetMousePosition();
+			EN_CORE_TRACE("{0}, {1}", x, y);
 		}
 	}
 

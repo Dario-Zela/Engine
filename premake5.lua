@@ -15,6 +15,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Engine/vendor/GLAD/include"
 IncludeDir["ImGUI"] = "Engine/vendor/ImGUI"
+IncludeDir["glm"] = "Engine/vendor/glm"
 
 group "Dependencies"
 include "Engine/vendor/GLFW"
@@ -46,7 +47,8 @@ project "Engine"
 		"%{prj.name}/Vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGUI}"
+		"%{IncludeDir.ImGUI}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -104,7 +106,8 @@ project "Tester"
 	includedirs
 	{
 		"Engine/Vendor/spdlog/include",
-		"Engine/src"
+		"Engine/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links
