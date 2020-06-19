@@ -54,7 +54,6 @@ namespace Engine
 			{
 				layer->OnUpdate();
 			}
-			aWindow->OnUpdate();
 
 			aImGUILayer->Begin();
 			for (Layer* layer : aLayerStack)
@@ -63,8 +62,7 @@ namespace Engine
 			}
 			aImGUILayer->End();
 
-			auto [x, y] = Input::GetMousePosition();
-			EN_CORE_TRACE("{0}, {1}", x, y);
+			aWindow->OnUpdate();
 		}
 	}
 
