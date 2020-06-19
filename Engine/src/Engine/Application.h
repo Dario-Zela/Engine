@@ -33,6 +33,8 @@ namespace Engine
 		ImGUILayer* aImGUILayer;
 		bool aRunning = true;
 		LayerStack aLayerStack;
+
+		unsigned int aVertexArray, aVertexBuffer, aIndexBuffer;
 	};
 
 	// This linkes the game code to the engine and should be defined where it is used

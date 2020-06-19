@@ -10,9 +10,6 @@
     <Filter Include="Engine\ImGUI">
       <UniqueIdentifier>{05716795-F1D3-F639-9A59-2FF0869BC2BC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="OpenGL">
-      <UniqueIdentifier>{8A864AC8-7628-759E-5FE3-88F24B24FCEE}</UniqueIdentifier>
-    </Filter>
     <Filter Include="WindowImp">
       <UniqueIdentifier>{23624C74-8FCC-00EB-D80A-B29044B4DE3F}</UniqueIdentifier>
     </Filter>
@@ -71,11 +68,16 @@
     <ClInclude Include="src\WindowImp\WindowsWindow.h">
       <Filter>WindowImp</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\OpenGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ENPH.cpp" />
     <ClCompile Include="src\Engine\Application.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ImGUI\ImGUIBuild.cpp">
+      <Filter>Engine\ImGUI</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\ImGUI\ImGUILayer.cpp">
       <Filter>Engine\ImGUI</Filter>
@@ -95,6 +97,6 @@
     <ClCompile Include="src\WindowImp\WindowsWindow.cpp">
       <Filter>WindowImp</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\ImGUI\ImGUIBuild.cpp" />
+    <ClCompile Include="src\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ project "GLAD"
 	}
 
 	systemversion "latest"
-	staticruntime "On"
+	staticruntime "on"
 
 	filter "configurations:Release"
 		buildoptions "/MT"

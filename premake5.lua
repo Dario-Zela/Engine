@@ -41,6 +41,11 @@ project "Engine"
 		"%{prj.name}/src/**.cpp",
 	}
 
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
 	includedirs
 	{
 		"%{prj.name}/src",
@@ -74,6 +79,9 @@ project "Engine"
 	{
 		"{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Tester/\""
 	}
+
+	buildoptions "/wd4251"
+	
 	filter "configurations:Debug"
 		defines "EN_DEBUG"
 		runtime "Debug"
@@ -123,6 +131,8 @@ project "Tester"
 	{
 
 	}
+
+	buildoptions "/wd4251"
 
 	filter "configurations:Debug"
 		defines "EN_DEBUG"

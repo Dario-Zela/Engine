@@ -8,12 +8,10 @@ public:
 
 	void OnUpdate() override
 	{
-		EN_INFO("Example Layer Update");
 	}
 
 	void OnEvent(Engine::Event& e) 
 	{
-		EN_TRACE("{0}", e);
 	}
 };
 
