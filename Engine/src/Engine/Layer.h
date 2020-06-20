@@ -9,7 +9,7 @@ namespace Engine
 	{
 	public:
 		Layer(const std::string& name = "Layer");
-		virtual ~Layer();
+		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
@@ -17,9 +17,9 @@ namespace Engine
 		virtual void OnEvent(Event& e) {}
 		virtual void OnImGUIRender() {}
 
-		inline const std::string& GetName() const { return lDebugName; }
+		inline const std::string& GetName() const { return mDebugName; }
 
 	private:
-		std::string lDebugName;
+		std::string mDebugName;
 	};
 }

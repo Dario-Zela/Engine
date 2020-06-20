@@ -70,6 +70,10 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Engine\Renderer\Shader.h" />
+    <ClInclude Include="src\Engine\Renderer\Buffer.h" />
+    <ClInclude Include="src\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\Engine\Renderer\Reneder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ENPH.cpp" />
@@ -98,5 +102,9 @@
       <Filter>WindowImp</Filter>
     </ClCompile>
     <ClCompile Include="src\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Reneder.cpp" />
   </ItemGroup>
 </Project>

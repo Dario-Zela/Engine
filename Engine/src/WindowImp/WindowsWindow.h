@@ -13,20 +13,20 @@ namespace Engine
 
 		void OnUpdate() override;
 
-		inline unsigned int GetWidth() const override { return wData.Width; }
-		inline unsigned int GetHeight() const override { return wData.Height; }
+		inline unsigned int GetWidth() const override { return mData.Width; }
+		inline unsigned int GetHeight() const override { return mData.Height; }
 
 		//Window Atributes
-		inline void SetEventCallback(const EventCallbackFn& callback) override { wData.EventCallback = callback; };
+		inline void SetEventCallback(const EventCallbackFn& callback) override { mData.EventCallback = callback; };
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
-		inline virtual void* GetNativeWindow() const { return (void*)wWindow; }
+		inline virtual void* GetNativeWindow() const { return (void*)mWindow; }
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
 		
-		GLFWwindow* wWindow;
-		GraphicsContext* wContext;
+		GLFWwindow* mWindow;
+		GraphicsContext* mContext;
 
 		struct WindowData
 		{
@@ -37,7 +37,7 @@ namespace Engine
 			EventCallbackFn EventCallback;
 		};
 
-		WindowData wData;
+		WindowData mData;
 	};
 
 }

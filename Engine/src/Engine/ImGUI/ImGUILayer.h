@@ -11,7 +11,7 @@ namespace Engine
 	{
 	public:
 		ImGUILayer();
-		~ImGUILayer();
+		~ImGUILayer() = default;
 
 		virtual void OnDetach() override;
 		virtual void OnAttach() override;
@@ -20,6 +20,6 @@ namespace Engine
 		void Begin();
 		void End();
 	private:
-		float iTime;
+		float mTime;
 	};
 }

@@ -8,6 +8,8 @@
 #include "Window.h"
 
 #include "Engine/ImGUI/ImGUILayer.h"
+#include "Engine/Renderer/Shader.h"
+#include "Engine/Renderer/Buffer.h"
 
 namespace Engine 
 {
@@ -15,7 +17,7 @@ namespace Engine
 	{
 	public:
 		Application();
-		virtual ~Application();
+		virtual ~Application() = default;
 
 		void OnEvent(Event& e);
 		void Run();
@@ -24,17 +26,20 @@ namespace Engine
 		void PushOverlay(Layer* overlay);
 
 		inline static Application& Get() { return *sInstance; }
-		inline Window& GetWindow() { return *aWindow; }
-	private:
+		inline Window& GetWindow() { return *mWindow; }
 
+	private:
 		static Application* sInstance;
 		bool OnWindowClosed(WindowClosedEvent& e);
-		std::unique_ptr<Window> aWindow;
-		ImGUILayer* aImGUILayer;
-		bool aRunning = true;
-		LayerStack aLayerStack;
+		std::unique_ptr<Window> mWindow;
+		ImGUILayer* mImGUILayer;
+		bool mRunning = true;
+		LayerStack mLayerStack;
 
-		unsigned int aVertexArray, aVertexBuffer, aIndexBuffer;
+		unsigned int aVertexArray;
+		std::unique_ptr<Shader> mShader;
+		std::unique_ptr<VertexBuffer> mVertexBuffer;
+		std::unique_ptr<IndexBuffer> mIndexBuffer;
 	};
 
 	// This linkes the game code to the engine and should be defined where it is used

@@ -6,14 +6,14 @@
 namespace Engine
 {
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
-		:cWindowHandle(windowHandle) 
+		:mWindowHandle(windowHandle) 
 	{
 		EN_CORE_ASSERT(windowHandle, "Window Handle is null");
 	}
 
 	void OpenGLContext::Init()
 	{
-		glfwMakeContextCurrent(cWindowHandle);
+		glfwMakeContextCurrent(mWindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		EN_CORE_ASSERT(status, "Failed to Initialise OpenGL");
 
@@ -24,6 +24,6 @@ namespace Engine
 
 	void OpenGLContext::SwapBuffers()
 	{
-		glfwSwapBuffers(cWindowHandle);
+		glfwSwapBuffers(mWindowHandle);
 	}
 }

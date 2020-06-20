@@ -4,7 +4,5 @@
 namespace Engine
 {
 	Layer::Layer(const std::string& debugName)
-		:lDebugName(debugName) { }
-
-	Layer::~Layer() { }
+		:mDebugName(debugName) { }
 }

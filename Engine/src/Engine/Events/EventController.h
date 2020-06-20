@@ -44,9 +44,9 @@ namespace Engine
 		virtual std::string ToString() const { return GetName(); }
 
 		inline bool IsInCategory(EventCategory category) const { return GetCategoryFlags() & category; }
-		inline bool IsHandled() const { return eHandled; }
+		inline bool IsHandled() const { return mHandled; }
 	protected:
-		bool eHandled = false;
+		bool mHandled = false;
 	};
 
 	class EventDispatcher
@@ -64,7 +64,7 @@ namespace Engine
 		{
 			if (dEvent.GetEventType() == T::GetStaticType()) 
 			{
-				dEvent.eHandled = func(*(T*)&dEvent);
+				dEvent.mHandled = func(*(T*)&dEvent);
 				return true;
 			}
 			return false;

@@ -15,12 +15,7 @@
 namespace Engine 
 {
 	ImGUILayer::ImGUILayer()
-		:Layer("ImGUILayer"), iTime(0.0f) {}
-
-	ImGUILayer::~ImGUILayer()
-	{
-
-	}
+		:Layer("ImGUILayer"), mTime(0.0f) {}
 
 	void ImGUILayer::OnAttach()
 	{

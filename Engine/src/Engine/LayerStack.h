@@ -16,11 +16,11 @@ namespace Engine
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* overlay);
 
-		std::vector<Layer*>::iterator begin() { return lLayers.begin(); }
-		std::vector<Layer*>::iterator end() { return lLayers.end(); }
+		std::vector<Layer*>::iterator begin() { return mLayers.begin(); }
+		std::vector<Layer*>::iterator end() { return mLayers.end(); }
 
 	private:
-		std::vector<Layer*> lLayers;
-		unsigned int lLayerInsertIndex = 0;
+		std::vector<Layer*> mLayers;
+		unsigned int mLayerInsertIndex = 0;
 	};
 }

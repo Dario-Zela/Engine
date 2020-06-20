@@ -5,11 +5,35 @@
 
 namespace Engine
 { 
+	static GLenum ShaderDataTypeToGLBaseType(ShaderDataType type)
+	{
+		switch (type)
+		{
+		case ShaderDataType::None: EN_CORE_ASSERT(false, "Invalid ShaderDataType"); return GL_NONE;
+		case ShaderDataType::VecF2: return GL_FLOAT;
+		case ShaderDataType::VecF3: return GL_FLOAT;
+		case ShaderDataType::VecF4: return GL_FLOAT;
+		case ShaderDataType::VecI2: return GL_INT;
+		case ShaderDataType::VecI3: return GL_INT;
+		case ShaderDataType::VecI4: return GL_INT;
+		case ShaderDataType::MatF2: return GL_FLOAT;
+		case ShaderDataType::MatF3: return GL_FLOAT;
+		case ShaderDataType::MatF4: return GL_FLOAT;
+		case ShaderDataType::MatI2: return GL_INT;
+		case ShaderDataType::MatI3: return GL_INT;
+		case ShaderDataType::MatI4: return GL_INT;
+		case ShaderDataType::Bool: return GL_BOOL;
+		}
+
+		EN_CORE_ASSERT(false, "Unknown ShaderDataType");
+		return 0;
+	}
+
 	Application* Application::sInstance = nullptr;
 
 	bool Application::OnWindowClosed(WindowClosedEvent& e)
 	{
-		aRunning = false;
+		mRunning = false;
 		return true;
 	}
 
@@ -17,40 +41,73 @@ namespace Engine
 	{
 		EN_CORE_ASSERT(!sInstance, "Application already exists");
 		sInstance = this;
-		aWindow = std::unique_ptr<Window>(Window::Create());
-		aWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
+		mWindow = std::unique_ptr<Window>(Window::Create());
+		mWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
 
-		aImGUILayer = new ImGUILayer();
-		aLayerStack.PushOverlay(aImGUILayer);
+		mImGUILayer = new ImGUILayer();
+		mLayerStack.PushOverlay(mImGUILayer);
 
 		glGenVertexArrays(1, &aVertexArray);
 		glBindVertexArray(aVertexArray);
 
-		glGenBuffers(1, &aVertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, aVertexBuffer);
-
-		float vertecies[9] = 
+		float vertecies[] = 
 		{
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0,
+			0.5f, -0.5f, 0.0f, 0.4f, 1.0f, 1.0f, 1.0,
+			0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0
 		};
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_STATIC_DRAW);
+		mVertexBuffer.reset(VertexBuffer::Create(sizeof(vertecies), vertecies));
+		{
+			BufferLayout layout =
+			{
+				{ "aPosition", ShaderDataType::VecF3},
+				{ "aColor", ShaderDataType::VecF4 }
+			};
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-
-		glGenBuffers(1, &aIndexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, aIndexBuffer);
-
+			mVertexBuffer->SetLayout(layout);
+		}
+		unsigned int index = 0;
+		const auto& layout = mVertexBuffer->GetLayout();
+		for (const auto& element : layout)
+		{
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, element.GetElementCount(), ShaderDataTypeToGLBaseType(element.Type),
+				element.Normalised ? GL_TRUE : GL_FALSE, layout.GetStride(),
+				(const void*)element.Offset);
+			index++;
+		}
 		unsigned int indecies[3] = { 0,1,2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indecies), indecies, GL_STATIC_DRAW);
-	}
+		mIndexBuffer.reset(IndexBuffer::Create(sizeof(indecies) / sizeof(unsigned int), indecies));
+		mIndexBuffer->Bind();
 
-	Application::~Application()
-	{
+		std::string vertexSrc = R"(
+		#version 330 core
+		
+		layout(location = 0) in vec3 aPosition;
+		layout(location = 1) in vec4 aColor;
+		out vec4 vCombined;
 
+		void main()
+		{
+			vCombined = (vec4(aPosition  * 0.5 + 0.5, 1.0) + aColor) / 2.0;
+			gl_Position = vec4(aPosition,1.0);
+		}
+		)";
+
+		std::string fragmentSrc = R"(
+		#version 330 core
+		
+		layout(location = 0) out vec4 color;
+		in vec4 vCombined;		
+
+		void main()
+		{
+			color = vec4(vCombined);
+		}
+		)";
+
+		mShader.reset(new Shader(vertexSrc, fragmentSrc));
 	}
 
 	void Application::OnEvent(Event& e) 
@@ -58,7 +115,7 @@ namespace Engine
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(EN_BIND_EVENT_FN(Application::OnWindowClosed));
 
-		for (auto it = aLayerStack.end(); it != aLayerStack.begin();)
+		for (auto it = mLayerStack.end(); it != mLayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
 			if (e.IsHandled())
@@ -68,36 +125,39 @@ namespace Engine
 
 	void Application::Run()
 	{
-		while (aRunning)
+		while (mRunning)
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			mShader->Bind();
 			glBindVertexArray(aVertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, mIndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
-
-			for (Layer* layer : aLayerStack)
+			for (Layer* layer : mLayerStack)
 			{
 				layer->OnUpdate();
 			}
 
-			aImGUILayer->Begin();
-			for (Layer* layer : aLayerStack)
+			mImGUILayer->Begin();
+			for (Layer* layer : mLayerStack)
 			{
 				layer->OnImGUIRender();
 			}
-			aImGUILayer->End();
+			mImGUILayer->End();
 
-			aWindow->OnUpdate();
+			
+
+			mWindow->OnUpdate();
 		}
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
-		aLayerStack.PushLayer(layer);
+		mLayerStack.PushLayer(layer);
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
-		aLayerStack.PushOverlay(overlay);
+		mLayerStack.PushOverlay(overlay);
 	}
 }

@@ -9,22 +9,22 @@ namespace Engine
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
-			:wWidth(width), wHeight(height) {};
+			:mWidth(width), mHeight(height) {};
 
-		inline unsigned int GetWidth() { return wWidth; }
-		inline unsigned int GetHeight() { return wHeight; }
+		inline unsigned int GetWidth() { return mWidth; }
+		inline unsigned int GetHeight() { return mHeight; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "WindowResizeEvent: Width = " << wWidth << ", Heght = " << wHeight;
+			ss << "WindowResizeEvent: Width = " << mWidth << ", Heght = " << mHeight;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(WindowResize)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	private:
-		unsigned int wWidth, wHeight;
+		unsigned int mWidth, mHeight;
 	};
 
 	class ENGINE_API WindowClosedEvent : public Event
