@@ -3,8 +3,8 @@
 
 namespace Engine
 {
-	std::shared_ptr<spdlog::logger> Log::mCoreLogger;
-	std::shared_ptr<spdlog::logger> Log::mClientLogger;
+	Ref<spdlog::logger> Log::mCoreLogger;
+	Ref<spdlog::logger> Log::mClientLogger;
 
 	void Log::Init() 
 	{

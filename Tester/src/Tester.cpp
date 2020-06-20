@@ -1,6 +1,9 @@
 #include <Engine.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <OpenGL/OpenGLShader.h>
+#include <glm/gtc/type_ptr.hpp>
+
 class ExampleLayer : public Engine::Layer
 {
 public:
@@ -15,7 +18,7 @@ public:
 			0.5f, -0.5f, 0.0f, 0.4f, 1.0f, 1.0f, 1.0,
 			0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0
 		};
-		std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
+		Engine::Ref<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(sizeof(vertecies), vertecies));
 		{
 			Engine::BufferLayout layout =
@@ -30,7 +33,7 @@ public:
 		mVertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indecies[3] = { 0,1,2 };
-		std::shared_ptr<Engine::IndexBuffer> indexBuffer;
+		Engine::Ref<Engine::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Engine::IndexBuffer::Create(sizeof(indecies) / sizeof(unsigned int), indecies));
 
 		mVertexArray->SetIndexBuffer(indexBuffer);
@@ -43,12 +46,9 @@ public:
 		
 		uniform mat4 uTransform;
 		uniform mat4 uViewProjection;
-	
-		out vec4 vCombined;
 
 		void main()
 		{
-			vCombined = (vec4(aPosition  * 0.5 + 0.5, 1.0) + aColor) / 2.0;
 			gl_Position = uViewProjection * uTransform * vec4(aPosition, 1.0);
 		}
 		)";
@@ -57,15 +57,16 @@ public:
 		#version 330 core
 		
 		layout(location = 0) out vec4 color;
-		in vec4 vCombined;		
+
+		uniform vec3 uColor;
 
 		void main()
 		{
-			color = vec4(vCombined);
+			color = vec4(uColor, 1.0);
 		}
 		)";
 
-		mShader.reset(new Engine::Shader(vertexSrc, fragmentSrc));
+		mShader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
@@ -99,6 +100,9 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(0.1f), glm::vec3(0.1f));
 
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(mShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(mShader)->UploadUniformVecF3("uColor", mColor);
+
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
@@ -112,20 +116,29 @@ public:
 		Engine::Renderer::EndScene();
 	}
 
+	virtual void OnImGUIRender() override
+	{
+		Engine::ImGUI::Begin("Settings");
+		Engine::ImGUI::ColorEdit3("Color", glm::value_ptr(mColor));
+		Engine::ImGUI::End();
+	}
+
 	void OnEvent(Engine::Event& e)
 	{
 
 	}
 
 private:
-		std::shared_ptr<Engine::Shader> mShader;
-		std::shared_ptr<Engine::VertexArray> mVertexArray;
+		Engine::Ref<Engine::Shader> mShader;
+		Engine::Ref<Engine::VertexArray> mVertexArray;
 		Engine::OrthographicCamera mCamera;
 		glm::vec3 mCameraPosition;
 		float mCameraSpeed = 5.0f;
 
 		float mCameraRotation = 0.0f;
 		float mCameraRotationSpeed = 180.0f;
+
+		glm::vec3 mColor { 0.8f, 0.2f, 0.3f};
 };
 
 class Tester : public Engine::Application

@@ -35,7 +35,7 @@ namespace Engine
 	private:
 		static Application* sInstance;
 		bool OnWindowClosed(WindowClosedEvent& e);
-		std::unique_ptr<Window> mWindow;
+		Scope<Window> mWindow;
 		ImGUILayer* mImGUILayer;
 		bool mRunning = true;
 		LayerStack mLayerStack;

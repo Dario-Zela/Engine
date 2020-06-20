@@ -18,12 +18,11 @@ namespace Engine
 	{
 		EN_CORE_ASSERT(!sInstance, "Application already exists");
 		sInstance = this;
-		mWindow = std::unique_ptr<Window>(Window::Create());
+		mWindow = Scope<Window>(Window::Create());
 		mWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
-		mWindow->SetVSync(false);
 
 		mImGUILayer = new ImGUILayer();
-		mLayerStack.PushOverlay(mImGUILayer);
+		PushOverlay(mImGUILayer);
 	}
 
 	void Application::OnEvent(Event& e) 

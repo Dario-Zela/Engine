@@ -12,6 +12,7 @@
 #include "Engine/MouseCodes.h"
 
 #include "Engine/ImGUI/ImGUILayer.h"
+#include "Engine/ImGUI/ImGUIWrapper.h"
 
 // ----------Renderer-------------
 #include "Engine/Renderer/Render.h"
