@@ -7,6 +7,8 @@
 #include "Engine/LayerStack.h"
 #include "Window.h"
 
+#include "Engine/Core/TimeStep.h"
+
 #include "Engine/ImGUI/ImGUILayer.h"
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/Buffer.h"
@@ -37,10 +39,7 @@ namespace Engine
 		ImGUILayer* mImGUILayer;
 		bool mRunning = true;
 		LayerStack mLayerStack;
-
-		std::shared_ptr<Shader> mShader;
-		std::shared_ptr<VertexArray> mVertexArray;
-		OrthographicCamera mCamera;
+		float mLastFrameTime = 0;
 	};
 
 	// This linkes the game code to the engine and should be defined where it is used

@@ -80,6 +80,7 @@
     <ClInclude Include="src\Engine\Renderer\Render.h" />
     <ClInclude Include="src\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Engine\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Engine\Core\TimeStep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ENPH.cpp" />

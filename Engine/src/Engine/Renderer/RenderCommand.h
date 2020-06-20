@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	class RenderCommand
+	class ENGINE_API RenderCommand
 	{
 	public:
 		inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) { sRendererAPI->DrawIndexed(vertexArray); }

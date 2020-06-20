@@ -4,7 +4,7 @@
 
 namespace Engine
 {
-	class VertexArray
+	class ENGINE_API VertexArray
 	{
 	public:
 		virtual ~VertexArray() = default;

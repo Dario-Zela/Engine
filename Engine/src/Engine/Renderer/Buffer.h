@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-	enum class ShaderDataType
+	enum class ENGINE_API ShaderDataType
 	{
 		None = 0, VecF2, VecF3, VecF4,
 		VecI2, VecI3, VecI4,
@@ -35,7 +35,7 @@ namespace Engine
 		return 0;
 	}
 
-	struct BufferElement
+	struct ENGINE_API BufferElement
 	{
 		std::string Name;
 		ShaderDataType Type;
@@ -78,7 +78,7 @@ namespace Engine
 		}
 	};
 
-	class BufferLayout
+	class ENGINE_API BufferLayout
 	{
 	public:
 		BufferLayout(const std::initializer_list<BufferElement>& layout)
@@ -113,7 +113,7 @@ namespace Engine
 		unsigned int mStride = 0;
 	};
 
-	class VertexBuffer
+	class ENGINE_API VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() = default;
@@ -127,7 +127,7 @@ namespace Engine
 		static VertexBuffer* Create(unsigned int size, float* vertecies);
 	};
 
-	class IndexBuffer
+	class ENGINE_API IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() = default;

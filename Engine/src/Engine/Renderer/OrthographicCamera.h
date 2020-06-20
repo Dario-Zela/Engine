@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class OrthographicCamera
+	class ENGINE_API OrthographicCamera
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);

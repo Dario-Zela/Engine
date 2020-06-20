@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "Input.h"
 #include "Engine/Renderer/Render.h"
-
+#include "GLFW/glfw3.h"
 
 namespace Engine
 { 
@@ -15,81 +15,21 @@ namespace Engine
 	}
 
 	Application::Application()
-		:mCamera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		EN_CORE_ASSERT(!sInstance, "Application already exists");
 		sInstance = this;
 		mWindow = std::unique_ptr<Window>(Window::Create());
 		mWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
+		mWindow->SetVSync(false);
 
 		mImGUILayer = new ImGUILayer();
 		mLayerStack.PushOverlay(mImGUILayer);
-
-		mVertexArray.reset(VertexArray::Create());
-
-		float vertecies[] = 
-		{
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0,
-			0.5f, -0.5f, 0.0f, 0.4f, 1.0f, 1.0f, 1.0,
-			0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0
-		};
-		std::shared_ptr<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(sizeof(vertecies), vertecies));
-		{
-			BufferLayout layout =
-			{
-				{ "aPosition", ShaderDataType::VecF3},
-				{ "aColor", ShaderDataType::VecF4 }
-			};
-
-			vertexBuffer->SetLayout(layout);
-		}
-		
-		mVertexArray->AddVertexBuffer(vertexBuffer);
-
-		unsigned int indecies[3] = { 0,1,2 };
-		std::shared_ptr<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(sizeof(indecies) / sizeof(unsigned int), indecies));
-		
-		mVertexArray->SetIndexBuffer(indexBuffer);
-
-		std::string vertexSrc = R"(
-		#version 330 core
-		
-		layout(location = 0) in vec3 aPosition;
-		layout(location = 1) in vec4 aColor;
-		
-		uniform mat4 uViewProjection;
-	
-		out vec4 vCombined;
-
-		void main()
-		{
-			vCombined = (vec4(aPosition  * 0.5 + 0.5, 1.0) + aColor) / 2.0;
-			gl_Position = uViewProjection * vec4(aPosition, 1.0);
-		}
-		)";
-
-		std::string fragmentSrc = R"(
-		#version 330 core
-		
-		layout(location = 0) out vec4 color;
-		in vec4 vCombined;		
-
-		void main()
-		{
-			color = vec4(vCombined);
-		}
-		)";
-
-		mShader.reset(new Shader(vertexSrc, fragmentSrc));
 	}
 
 	void Application::OnEvent(Event& e) 
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(EN_BIND_EVENT_FN(Application::OnWindowClosed));
-		dispatcher.Dispatch<KeyPressedEvent>(EN_BIND_EVENT_FN(Application::OnKeyPress));
 
 		for (auto it = mLayerStack.end(); it != mLayerStack.begin();)
 		{
@@ -103,18 +43,13 @@ namespace Engine
 	{
 		while (mRunning)
 		{
-			RenderCommand::Clear();
-
-			mCamera.SetRotation(rotation);
-			mCamera.SetPosition(Position);
-
-			Renderer::BeginScene(mCamera);
-			Renderer::Submit(mVertexArray, mShader);
-			Renderer::EndScene();
+			float time = (float)glfwGetTime();
+			TimeStep timeStep = time - mLastFrameTime ;
+			mLastFrameTime = time;
 
 			for (Layer* layer : mLayerStack)
 			{
-				layer->OnUpdate();
+				layer->OnUpdate(timeStep);
 			}
 
 			mImGUILayer->Begin();
