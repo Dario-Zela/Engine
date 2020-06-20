@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Engine/Renderer/Render.h"
 
+
 namespace Engine
 { 
 	Application* Application::sInstance = nullptr;
@@ -13,7 +14,8 @@ namespace Engine
 		return true;
 	}
 
-	Application::Application() 
+	Application::Application()
+		:mCamera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		EN_CORE_ASSERT(!sInstance, "Application already exists");
 		sInstance = this;
@@ -56,12 +58,15 @@ namespace Engine
 		
 		layout(location = 0) in vec3 aPosition;
 		layout(location = 1) in vec4 aColor;
+		
+		uniform mat4 uViewProjection;
+	
 		out vec4 vCombined;
 
 		void main()
 		{
 			vCombined = (vec4(aPosition  * 0.5 + 0.5, 1.0) + aColor) / 2.0;
-			gl_Position = vec4(aPosition,1.0);
+			gl_Position = uViewProjection * vec4(aPosition, 1.0);
 		}
 		)";
 
@@ -84,6 +89,7 @@ namespace Engine
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(EN_BIND_EVENT_FN(Application::OnWindowClosed));
+		dispatcher.Dispatch<KeyPressedEvent>(EN_BIND_EVENT_FN(Application::OnKeyPress));
 
 		for (auto it = mLayerStack.end(); it != mLayerStack.begin();)
 		{
@@ -99,9 +105,11 @@ namespace Engine
 		{
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
-			mShader->Bind();
-			Renderer::Submit(mVertexArray);
+			mCamera.SetRotation(rotation);
+			mCamera.SetPosition(Position);
+
+			Renderer::BeginScene(mCamera);
+			Renderer::Submit(mVertexArray, mShader);
 			Renderer::EndScene();
 
 			for (Layer* layer : mLayerStack)
@@ -116,8 +124,6 @@ namespace Engine
 			}
 			mImGUILayer->End();
 
-			
-
 			mWindow->OnUpdate();
 		}
 	}
@@ -131,4 +137,6 @@ namespace Engine
 	{
 		mLayerStack.PushOverlay(overlay);
 	}
+
+
 }

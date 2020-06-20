@@ -11,6 +11,7 @@
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/VertexArray.h"
+#include "Engine/Renderer/OrthographicCamera.h"
 
 namespace Engine 
 {
@@ -39,6 +40,7 @@ namespace Engine
 
 		std::shared_ptr<Shader> mShader;
 		std::shared_ptr<VertexArray> mVertexArray;
+		OrthographicCamera mCamera;
 	};
 
 	// This linkes the game code to the engine and should be defined where it is used
