@@ -10,6 +10,7 @@
 #include "Engine/ImGUI/ImGUILayer.h"
 #include "Engine/Renderer/Shader.h"
 #include "Engine/Renderer/Buffer.h"
+#include "Engine/Renderer/VertexArray.h"
 
 namespace Engine 
 {
@@ -36,10 +37,8 @@ namespace Engine
 		bool mRunning = true;
 		LayerStack mLayerStack;
 
-		unsigned int aVertexArray;
-		std::unique_ptr<Shader> mShader;
-		std::unique_ptr<VertexBuffer> mVertexBuffer;
-		std::unique_ptr<IndexBuffer> mIndexBuffer;
+		std::shared_ptr<Shader> mShader;
+		std::shared_ptr<VertexArray> mVertexArray;
 	};
 
 	// This linkes the game code to the engine and should be defined where it is used

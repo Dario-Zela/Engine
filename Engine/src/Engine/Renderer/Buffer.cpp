@@ -2,7 +2,7 @@
 #include "Buffer.h"
 
 #include "OpenGL/OpenGLBuffer.h"
-#include "Reneder.h"
+#include "Engine/Renderer/Render.h"
 
 namespace Engine
 {
@@ -10,8 +10,8 @@ namespace Engine
 	{
 		switch (Renderer::GetCurrenAPI())
 		{
-		case RendererAPI::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLVertexBuffer(size, vertecies);
+		case RendererAPI::API::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
+		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(size, vertecies);
 		default:
 			break;
 		}
@@ -23,8 +23,8 @@ namespace Engine
 	{
 		switch (Renderer::GetCurrenAPI())
 		{
-		case RendererAPI::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLIndexBuffer(count, indices);
+		case RendererAPI::API::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
+		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(count, indices);
 		default:
 			break;
 	}

@@ -28,22 +28,22 @@ namespace Engine
 
 	void LayerStack::PopLayer(Layer* layer)
 	{
-		auto it = std::find(mLayers.begin(), mLayers.end(), layer);
+		auto it = std::find(mLayers.begin(), mLayers.begin() + mLayerInsertIndex, layer);
 		if (it != mLayers.end())
 		{
+			layer->OnDetach();
 			mLayers.erase(it);
 			mLayerInsertIndex--;
 		}
-		layer->OnDetach();
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay)
 	{
-		auto it = std::find(mLayers.begin(), mLayers.end(), overlay);
+		auto it = std::find(mLayers.begin() + mLayerInsertIndex, mLayers.end(), overlay);
 		if (it != mLayers.end())
 		{
+			overlay->OnDetach();
 			mLayers.erase(it);
 		}
-		overlay->OnDetach();
 	}
 }
