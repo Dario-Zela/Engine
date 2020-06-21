@@ -14,9 +14,10 @@ public:
 
 		float vertecies[] =
 		{
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0,
-			0.5f, -0.5f, 0.0f, 0.4f, 1.0f, 1.0f, 1.0,
-			0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		Engine::Ref<Engine::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Engine::VertexBuffer::Create(sizeof(vertecies), vertecies));
@@ -24,7 +25,7 @@ public:
 			Engine::BufferLayout layout =
 			{
 				{ "aPosition", Engine::ShaderDataType::VecF3},
-				{ "aColor", Engine::ShaderDataType::VecF4 }
+				{ "aTexCoord", Engine::ShaderDataType::VecF2}
 			};
 
 			vertexBuffer->SetLayout(layout);
@@ -32,7 +33,7 @@ public:
 
 		mVertexArray->AddVertexBuffer(vertexBuffer);
 
-		unsigned int indecies[3] = { 0,1,2 };
+		unsigned int indecies[] = { 0,1,2, 2, 3, 0 };
 		Engine::Ref<Engine::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Engine::IndexBuffer::Create(sizeof(indecies) / sizeof(unsigned int), indecies));
 
@@ -42,7 +43,6 @@ public:
 		#version 330 core
 		
 		layout(location = 0) in vec3 aPosition;
-		layout(location = 1) in vec4 aColor;
 		
 		uniform mat4 uTransform;
 		uniform mat4 uViewProjection;
@@ -67,6 +67,14 @@ public:
 		)";
 
 		mShader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
+
+		mTexShader.reset(Engine::Shader::Create("assets/Shaders/Texture.glsl"));
+
+		mTexture = Engine::Texture2D::Create("assets/Textures/Test.bmp");
+		mTexture2 = Engine::Texture2D::Create("assets/Textures/Test2.png");
+
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(mTexShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(mTexShader)->UploadUniformInt("uTexture", 0);
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
@@ -113,6 +121,10 @@ public:
 			}
 		}
 
+		mTexture->Bind(0);
+		Engine::Renderer::Submit(mVertexArray, mTexShader, glm::scale(glm::mat4(0.1f), glm::vec3(1.5f)));
+		mTexture2->Bind(0);
+		Engine::Renderer::Submit(mVertexArray, mTexShader, glm::scale(glm::mat4(0.1f), glm::vec3(1.5f)));
 		Engine::Renderer::EndScene();
 	}
 
@@ -130,6 +142,7 @@ public:
 
 private:
 		Engine::Ref<Engine::Shader> mShader;
+		Engine::Ref<Engine::Shader> mTexShader;
 		Engine::Ref<Engine::VertexArray> mVertexArray;
 		Engine::OrthographicCamera mCamera;
 		glm::vec3 mCameraPosition;
@@ -138,6 +151,7 @@ private:
 		float mCameraRotation = 0.0f;
 		float mCameraRotationSpeed = 180.0f;
 
+		Engine::Ref<Engine::Texture2D> mTexture, mTexture2;
 		glm::vec3 mColor { 0.8f, 0.2f, 0.3f};
 };
 

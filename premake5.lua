@@ -9,6 +9,11 @@ workspace "Engine"
 		"Dist"
 	}
 
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}-x64"
 
 IncludeDir = {}
@@ -16,6 +21,7 @@ IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Engine/vendor/GLAD/include"
 IncludeDir["ImGUI"] = "Engine/vendor/ImGUI"
 IncludeDir["glm"] = "Engine/vendor/glm"
+IncludeDir["stb"] = "Engine/vendor/stb"
 
 group "Dependencies"
 include "Engine/vendor/GLFW"
@@ -39,6 +45,10 @@ project "Engine"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/Vendor/stb/**.h",
+		"%{prj.name}/Vendor/stb/**.cpp",
+		"%{prj.name}/Vendor/glm/glm/**.inl",
+		"%{prj.name}/Vendor/glm/glm/**.hpp"
 	}
 
 	defines
@@ -53,7 +63,8 @@ project "Engine"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGUI}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}"
 	}
 
 	links

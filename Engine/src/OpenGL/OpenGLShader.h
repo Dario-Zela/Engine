@@ -3,11 +3,15 @@
 #include <glm/glm.hpp>
 #include "Engine/Renderer/Shader.h"
 
+//To Remove
+typedef unsigned int GLenum;
+
 namespace Engine
 {
 	class __declspec(dllexport) OpenGLShader : public Shader
 	{
 	public:
+		OpenGLShader(const std::string& filePath);
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
@@ -25,6 +29,10 @@ namespace Engine
 		void UploadUniformInt(const std::string& name, int value);
 
 	private:
+		std::string ReadFile(const std::string& filePath);
+		std::unordered_map<GLenum, std::string> PreProccess(const std::string& shaderSrc);
+		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
+
 		unsigned int mRendererID;
 	};
 }

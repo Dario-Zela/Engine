@@ -15,8 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Tester.cpp">
+    <ClCompile Include="Tester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Textures\Test2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\Textures\Test.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\Shaders\Texture.glsl" />
   </ItemGroup>
 </Project>

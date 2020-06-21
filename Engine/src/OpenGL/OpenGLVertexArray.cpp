@@ -56,15 +56,14 @@ namespace Engine
 		glBindVertexArray(mRendererID);
 		vertexBuffer->Bind();
 
-		unsigned int index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.GetElementCount(), ShaderDataTypeToGLBaseType(element.Type),
+			glEnableVertexAttribArray(mBufferIndex);
+			glVertexAttribPointer(mBufferIndex, element.GetElementCount(), ShaderDataTypeToGLBaseType(element.Type),
 				element.Normalised ? GL_TRUE : GL_FALSE, layout.GetStride(),
-				(const void*)element.Offset);
-			index++;
+				(const void*)(intptr_t)element.Offset);
+			mBufferIndex++;
 		}
 
 		mVertexBuffers.push_back(vertexBuffer);

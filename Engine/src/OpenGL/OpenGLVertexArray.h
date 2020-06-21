@@ -22,6 +22,7 @@ namespace Engine
 		std::vector<Ref<VertexBuffer>> mVertexBuffers;
 		Ref<IndexBuffer> mIndexBuffer;
 
+		unsigned int mBufferIndex = 0;
 		unsigned int mRendererID;
 	};
 }

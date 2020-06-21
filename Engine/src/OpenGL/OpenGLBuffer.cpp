@@ -39,9 +39,9 @@ namespace Engine
 		:mCount(count)
 	{
 		glCreateBuffers(1, &mRenderID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRenderID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), indices, GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, mRenderID);
+		glBufferData(GL_ARRAY_BUFFER, count * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+		Unbind();
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
