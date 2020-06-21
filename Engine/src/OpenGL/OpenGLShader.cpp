@@ -12,9 +12,17 @@ namespace Engine
 		std::string shaderSrc = ReadFile(filePath);
 		auto shaderSources = PreProccess(shaderSrc);
 		Compile(shaderSources);
+		
+		//Extracts name from path
+		auto lastSlash = filePath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filePath.rfind('.');
+		auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+		mName = filePath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		:mName(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -82,7 +90,7 @@ namespace Engine
 	std::string OpenGLShader::ReadFile(const std::string& filePath)
 	{
 		std::string result;
-		std::ifstream in(filePath, std::ios::in, std::ios::binary);
+		std::ifstream in(filePath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -114,7 +122,7 @@ namespace Engine
 
 			size_t  nextLinePos = shaderSrc.find_first_not_of("\r\n", endOfLine);
 			position = shaderSrc.find(separationToken, nextLinePos);
-			shaderSources[ShaderTypeFromString(type)] = shaderSrc.substr(nextLinePos, position - 
+			shaderSources[ShaderTypeFromString(type)] = shaderSrc.substr(nextLinePos, position -
 				(nextLinePos == std::string::npos ? shaderSrc.size() - 1 : nextLinePos));
 		}
 		return shaderSources;
@@ -124,8 +132,9 @@ namespace Engine
 	{
 		// Get a program object.
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIds;
-
+		EN_CORE_ASSERT(shaderSources.size() < 5, "Too many shaders being uploaded at once");
+		std::array<GLenum, 5> glShaderIds;
+		int shaderIndex = 0;
 		for (auto [key, value] : shaderSources)
 		{
 			GLenum type = key;
@@ -165,7 +174,7 @@ namespace Engine
 
 			// Attach our shaders to our program
 			glAttachShader(program, Shader);
-			glShaderIds.push_back(Shader);
+			glShaderIds[shaderIndex++] = Shader;
 		}
 
 		mRendererID = program;
@@ -203,7 +212,7 @@ namespace Engine
 			glDetachShader(program, shader);
 	}
 
-	static GLenum ShaderTypeFromString(const std::string& type)
+	GLenum OpenGLShader::ShaderTypeFromString(const std::string& type)
 	{
 		if (type == "vertex") return GL_VERTEX_SHADER;
 		if (type == "fragment") return GL_FRAGMENT_SHADER;

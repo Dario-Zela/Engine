@@ -20,6 +20,7 @@ namespace Engine
 		sInstance = this;
 		mWindow = Scope<Window>(Window::Create());
 		mWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
+		mWindow->SetVSync(false);
 
 		Renderer::Init();
 

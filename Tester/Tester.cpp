@@ -66,19 +66,20 @@ public:
 		}
 		)";
 
-		mShader.reset(Engine::Shader::Create(vertexSrc, fragmentSrc));
+		mShaderLibrary.Add("FlatColor", Engine::Shader::Create(vertexSrc, fragmentSrc));
 
-		mTexShader.reset(Engine::Shader::Create("assets/Shaders/Texture.glsl"));
+		auto textureShader = mShaderLibrary.Load("assets/Shaders/Texture.glsl");
 
 		mTexture = Engine::Texture2D::Create("assets/Textures/Test.bmp");
 		mTexture2 = Engine::Texture2D::Create("assets/Textures/Test2.png");
 
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(mTexShader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(mTexShader)->UploadUniformInt("uTexture", 0);
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->UploadUniformInt("uTexture", 0);
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
 	{
+		EN_TRACE("Time: {0}ms, or {1} fps", timeStep.GetMilliseconds(), 1.0f / timeStep.GetSeconds());
 		float ts = timeStep;
 
 		if (Engine::Input::IsKeyPressed(EN_KEY_LEFT))
@@ -107,9 +108,10 @@ public:
 		Engine::Renderer::BeginScene(mCamera);
 
 		glm::mat4 scale = glm::scale(glm::mat4(0.1f), glm::vec3(0.1f));
+		auto flatShader = mShaderLibrary.Get("FlatColor");
 
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(mShader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(mShader)->UploadUniformVecF3("uColor", mColor);
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(flatShader)->Bind();
+		std::dynamic_pointer_cast<Engine::OpenGLShader>(flatShader)->UploadUniformVecF3("uColor", mColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -117,14 +119,16 @@ public:
 			{
 				glm::vec3 Position(x * 0.11f, y * 0.11f, 0.0f);
 				auto transform = glm::translate(glm::mat4(1.0f), Position) * scale;
-				Engine::Renderer::Submit(mVertexArray, mShader, transform);
+				Engine::Renderer::Submit(mVertexArray, mShaderLibrary.Get("FlatColor"), transform);
 			}
 		}
 
+		auto textureShader =  mShaderLibrary.Get("Texture");
+
 		mTexture->Bind(0);
-		Engine::Renderer::Submit(mVertexArray, mTexShader, glm::scale(glm::mat4(0.1f), glm::vec3(1.5f)));
+		Engine::Renderer::Submit(mVertexArray, textureShader, glm::scale(glm::mat4(0.1f), glm::vec3(1.5f)));
 		mTexture2->Bind(0);
-		Engine::Renderer::Submit(mVertexArray, mTexShader, glm::scale(glm::mat4(0.1f), glm::vec3(1.5f)));
+		Engine::Renderer::Submit(mVertexArray, textureShader, glm::scale(glm::mat4(0.1f), glm::vec3(1.5f)));
 		Engine::Renderer::EndScene();
 	}
 
@@ -141,8 +145,7 @@ public:
 	}
 
 private:
-		Engine::Ref<Engine::Shader> mShader;
-		Engine::Ref<Engine::Shader> mTexShader;
+		Engine::ShaderLibrary mShaderLibrary;
 		Engine::Ref<Engine::VertexArray> mVertexArray;
 		Engine::OrthographicCamera mCamera;
 		glm::vec3 mCameraPosition;
