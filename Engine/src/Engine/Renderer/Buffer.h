@@ -40,7 +40,7 @@ namespace Engine
 		std::string Name;
 		ShaderDataType Type;
 		unsigned int Size;
-		unsigned int Offset;
+		size_t Offset;
 		bool Normalised;
 
 		BufferElement()
@@ -99,7 +99,7 @@ namespace Engine
 	private:
 		void CalculateOffsetAndStride() 
 		{
-			unsigned int offset = 0;
+			size_t offset = 0;
 			mStride = 0;
 			for (auto& element : mElements)
 			{

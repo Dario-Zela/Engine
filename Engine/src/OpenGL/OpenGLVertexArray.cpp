@@ -62,7 +62,7 @@ namespace Engine
 			glEnableVertexAttribArray(mBufferIndex);
 			glVertexAttribPointer(mBufferIndex, element.GetElementCount(), ShaderDataTypeToGLBaseType(element.Type),
 				element.Normalised ? GL_TRUE : GL_FALSE, layout.GetStride(),
-				(const void*)(intptr_t)element.Offset);
+				(const void*)element.Offset);
 			mBufferIndex++;
 		}
 
