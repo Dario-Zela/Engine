@@ -14,13 +14,25 @@ namespace Engine
 		return true;
 	}
 
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			mMinimised = true;
+			return false;
+		}
+		mMinimised = false;
+		Renderer::OnWindowResise(e.GetWidth(), e.GetHeight());
+		
+		return false;
+	}
+
 	Application::Application()
 	{
 		EN_CORE_ASSERT(!sInstance, "Application already exists");
 		sInstance = this;
 		mWindow = Scope<Window>(Window::Create());
 		mWindow->SetEventCallback(EN_BIND_EVENT_FN(Application::OnEvent));
-		mWindow->SetVSync(false);
 
 		Renderer::Init();
 
@@ -32,6 +44,7 @@ namespace Engine
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(EN_BIND_EVENT_FN(Application::OnWindowClosed));
+		dispatcher.Dispatch<WindowResizeEvent>(EN_BIND_EVENT_FN(Application::OnWindowResize));
 
 		for (auto it = mLayerStack.end(); it != mLayerStack.begin();)
 		{
@@ -49,6 +62,7 @@ namespace Engine
 			TimeStep timeStep = time - mLastFrameTime ;
 			mLastFrameTime = time;
 
+			if(!mMinimised)
 			for (Layer* layer : mLayerStack)
 			{
 				layer->OnUpdate(timeStep);

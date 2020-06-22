@@ -4,7 +4,7 @@
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/EventController.h"
-#include "Engine/LayerStack.h"
+#include "Engine/Core/LayerStack.h"
 #include "Window.h"
 
 #include "Engine/Core/TimeStep.h"
@@ -35,9 +35,10 @@ namespace Engine
 	private:
 		static Application* sInstance;
 		bool OnWindowClosed(WindowClosedEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 		Scope<Window> mWindow;
 		ImGUILayer* mImGUILayer;
-		bool mRunning = true;
+		bool mRunning = true, mMinimised = false;
 		LayerStack mLayerStack;
 		float mLastFrameTime = 0;
 	};

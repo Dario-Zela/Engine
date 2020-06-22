@@ -1,16 +1,15 @@
 #include <Engine.h>
-#include <glm/gtc/matrix_transform.hpp>
+#include <Engine/Core/EntryPoint.h>
 
-#include <OpenGL/OpenGLShader.h>
-#include <glm/gtc/type_ptr.hpp>
+#include "Tester2D.h"
 
 class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), mCamera(-1.6f, 1.6f, -0.9f, 0.9f), mCameraPosition(0.0f)
+		:Layer("Example"), mCameraController(1.6f/0.9f, true)
 	{
-		mVertexArray.reset(Engine::VertexArray::Create());
+		mVertexArray = Engine::VertexArray::Create();
 
 		float vertecies[] =
 		{
@@ -20,7 +19,7 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		Engine::Ref<Engine::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Engine::VertexBuffer::Create(sizeof(vertecies), vertecies));
+		vertexBuffer = Engine::VertexBuffer::Create(sizeof(vertecies), vertecies);
 		{
 			Engine::BufferLayout layout =
 			{
@@ -35,7 +34,7 @@ public:
 
 		unsigned int indecies[] = { 0,1,2, 2, 3, 0 };
 		Engine::Ref<Engine::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Engine::IndexBuffer::Create(sizeof(indecies) / sizeof(unsigned int), indecies));
+		indexBuffer = Engine::IndexBuffer::Create(sizeof(indecies) / sizeof(unsigned int), indecies);
 
 		mVertexArray->SetIndexBuffer(indexBuffer);
 
@@ -72,46 +71,20 @@ public:
 
 		mTexture = Engine::Texture2D::Create("assets/Textures/Test.bmp");
 		mTexture2 = Engine::Texture2D::Create("assets/Textures/Test2.png");
-
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(textureShader)->UploadUniformInt("uTexture", 0);
 	}
 
 	void OnUpdate(Engine::TimeStep timeStep) override
 	{
+		mCameraController.OnUpdate(timeStep);
+
 		EN_TRACE("Time: {0}ms, or {1} fps", timeStep.GetMilliseconds(), 1.0f / timeStep.GetSeconds());
 		float ts = timeStep;
 
-		if (Engine::Input::IsKeyPressed(EN_KEY_LEFT))
-			mCameraPosition.x -= mCameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EN_KEY_UP))
-			mCameraPosition.y += mCameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EN_KEY_RIGHT))
-			mCameraPosition.x += mCameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EN_KEY_DOWN))
-			mCameraPosition.y -= mCameraSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EN_KEY_A))
-			mCameraRotation -= mCameraRotationSpeed * ts;
-
-		if (Engine::Input::IsKeyPressed(EN_KEY_D))
-			mCameraRotation += mCameraRotationSpeed * ts;
-
 		Engine::RenderCommand::Clear();
-
-		mCamera.SetRotation(mCameraRotation);
-		mCamera.SetPosition(mCameraPosition);
-
-		Engine::Renderer::BeginScene(mCamera);
+		Engine::Renderer::BeginScene(mCameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(0.1f), glm::vec3(0.1f));
 		auto flatShader = mShaderLibrary.Get("FlatColor");
-
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(flatShader)->Bind();
-		std::dynamic_pointer_cast<Engine::OpenGLShader>(flatShader)->UploadUniformVecF3("uColor", mColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -141,18 +114,13 @@ public:
 
 	void OnEvent(Engine::Event& e)
 	{
-
+		mCameraController.OnEvent(e);
 	}
 
 private:
 		Engine::ShaderLibrary mShaderLibrary;
 		Engine::Ref<Engine::VertexArray> mVertexArray;
-		Engine::OrthographicCamera mCamera;
-		glm::vec3 mCameraPosition;
-		float mCameraSpeed = 5.0f;
-
-		float mCameraRotation = 0.0f;
-		float mCameraRotationSpeed = 180.0f;
+		Engine::OrthographicCameraController mCameraController;
 
 		Engine::Ref<Engine::Texture2D> mTexture, mTexture2;
 		glm::vec3 mColor { 0.8f, 0.2f, 0.3f};
@@ -163,7 +131,8 @@ class Tester : public Engine::Application
 public:
 	Tester() 
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Tester2D());
 	}
 	~Tester() 
 	{

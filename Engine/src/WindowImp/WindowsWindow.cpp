@@ -46,7 +46,7 @@ namespace Engine
 		}
 
 		mWindow = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
-		mContext = new OpenGLContext(mWindow);
+		mContext = CreateScope<OpenGLContext>(mWindow);
 		
 		mContext->Init();
 		

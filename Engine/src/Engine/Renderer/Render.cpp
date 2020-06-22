@@ -1,14 +1,21 @@
 #include "ENPH.h"
 #include "Render.h"
 #include "OpenGL/OpenGLShader.h"
+#include "Renderer2D.h"
 
 namespace Engine 
 {
-	Renderer::SceneData* Renderer::sSceneData = new Renderer::SceneData;
+	Scope<Renderer::SceneData> Renderer::sSceneData = CreateScope<Renderer::SceneData>();
 
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
+	}
+
+	void Renderer::OnWindowResise(unsigned int width, unsigned int height)
+	{
+		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera)

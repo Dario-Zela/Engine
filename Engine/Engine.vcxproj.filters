@@ -1284,17 +1284,8 @@
     <ClInclude Include="src\Engine.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Application.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Core.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Core\TimeStep.h">
       <Filter>src\Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\EntryPoint.h">
-      <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Events\ApplicationEvent.h">
       <Filter>src\Engine\Events</Filter>
@@ -1313,24 +1304,6 @@
     </ClInclude>
     <ClInclude Include="src\Engine\ImGUI\ImGUIWrapper.h">
       <Filter>src\Engine\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Input.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\KeyCodes.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Layer.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\LayerStack.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Log.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\MouseCodes.h">
-      <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Buffer.h">
       <Filter>src\Engine\Renderer</Filter>
@@ -1359,9 +1332,6 @@
     <ClInclude Include="src\Engine\Renderer\VertexArray.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Window.h">
-      <Filter>src\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\OpenGL\OpenGLBuffer.h">
       <Filter>src\OpenGL</Filter>
     </ClInclude>
@@ -1386,6 +1356,38 @@
     <ClInclude Include="src\WindowImp\WindowsWindow.h">
       <Filter>src\WindowImp</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\Application.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Core.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\EntryPoint.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Input.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\KeyCodes.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Layer.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\LayerStack.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Log.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\MouseCodes.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Core\Window.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\OrthographicCameraController.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb\stb_image.cpp">
@@ -1393,9 +1395,6 @@
     </ClCompile>
     <ClCompile Include="src\ENPH.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Application.cpp">
-      <Filter>src\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\ImGUI\ImGUIBuild.cpp">
       <Filter>src\Engine\ImGUI</Filter>
@@ -1405,15 +1404,6 @@
     </ClCompile>
     <ClCompile Include="src\Engine\ImGUI\ImGUIWrapper.cpp">
       <Filter>src\Engine\ImGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Layer.cpp">
-      <Filter>src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\LayerStack.cpp">
-      <Filter>src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Log.cpp">
-      <Filter>src\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Buffer.cpp">
       <Filter>src\Engine\Renderer</Filter>
@@ -1463,5 +1453,19 @@
     <ClCompile Include="src\WindowImp\WindowsWindow.cpp">
       <Filter>src\WindowImp</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Core\Application.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Core\Layer.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Core\LayerStack.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Core\Log.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

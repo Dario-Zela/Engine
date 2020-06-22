@@ -1,0 +1,39 @@
+#include "Tester2D.h"
+
+Tester2D::Tester2D()
+	:Layer("Tester2D"), mCameraController(1280.0f / 720.0f)
+{
+}
+
+void Tester2D::OnUpdate(Engine::TimeStep timeStep)
+{
+	mCameraController.OnUpdate(timeStep);
+
+	Engine::RenderCommand::Clear();
+	Engine::Renderer2D::BeginScene(mCameraController.GetCamera());
+	Engine::Renderer2D::DrawQuad({ -0.5,-0.5 }, { 1,1 }, { 0.8f,0.2f,0.8f, 1.0f });
+
+	Engine::Renderer2D::EndScene();
+}
+
+void Tester2D::OnImGUIRender()
+{
+	Engine::ImGUI::Begin("Settings");
+	Engine::ImGUI::ColorEdit3("Color", glm::value_ptr(mColor));
+	Engine::ImGUI::End();
+}
+
+void Tester2D::OnEvent(Engine::Event& e)
+{
+	mCameraController.OnEvent(e);
+}
+
+void Tester2D::OnAttach()
+{
+	
+}
+
+void Tester2D::OnDetach()
+{
+
+}

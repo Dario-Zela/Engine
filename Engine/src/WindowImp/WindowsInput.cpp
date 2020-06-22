@@ -1,11 +1,11 @@
 #include "ENPH.h"
-#include "Engine/Application.h"
+#include "Engine/Core/Application.h"
 #include "WindowsInput.h"
 #include <GLFW/glfw3.h>
 
 namespace Engine
 {
-	Input* Input::sInstance = new WindowsInput();
+	Scope<Input> Input::sInstance = CreateScope<WindowsInput>();
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{

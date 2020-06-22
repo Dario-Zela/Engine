@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Tester.cpp" />
+    <ClCompile Include="Tester2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
@@ -146,7 +147,11 @@
     <Image Include="assets\Textures\Test2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Shaders\FlatColor.glsl" />
     <None Include="assets\Shaders\Texture.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Tester2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

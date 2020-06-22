@@ -2,9 +2,9 @@
 #include "ImGUILayer.h"
 
 #include "imgui.h"
-#include "Engine/KeyCodes.h"
-#include "Engine/MouseCodes.h"
-#include "Engine/Application.h"
+#include "Engine/Core/KeyCodes.h"
+#include "Engine/Core/MouseCodes.h"
+#include "Engine/Core/Application.h"
 
 #include "examples/imgui_impl_opengl3.h"
 #include "examples/imgui_impl_glfw.h"

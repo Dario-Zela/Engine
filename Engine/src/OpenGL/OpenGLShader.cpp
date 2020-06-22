@@ -121,9 +121,11 @@ namespace Engine
 			EN_CORE_ASSERT(ShaderTypeFromString(type), "Unknown shader type");
 
 			size_t  nextLinePos = shaderSrc.find_first_not_of("\r\n", endOfLine);
+			EN_CORE_ASSERT(nextLinePos != std::string::npos, "SintaxError");
 			position = shaderSrc.find(separationToken, nextLinePos);
-			shaderSources[ShaderTypeFromString(type)] = shaderSrc.substr(nextLinePos, position -
-				(nextLinePos == std::string::npos ? shaderSrc.size() - 1 : nextLinePos));
+
+			shaderSources[ShaderTypeFromString(type)] = (position == std::string::npos) ? shaderSrc.substr(nextLinePos) 
+				: shaderSrc.substr(nextLinePos, position - nextLinePos);
 		}
 		return shaderSources;
 	}
@@ -209,7 +211,10 @@ namespace Engine
 
 		// Always detach shaders after a successful link.
 		for (GLenum shader : glShaderIds)
+		{
 			glDetachShader(program, shader);
+			glDeleteShader(shader);
+		}
 	}
 
 	GLenum OpenGLShader::ShaderTypeFromString(const std::string& type)

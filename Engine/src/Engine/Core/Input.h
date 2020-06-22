@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Core.h"
+#include "Engine/Core/Core.h"
 
 namespace Engine
 {
@@ -23,6 +23,6 @@ namespace Engine
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
 	private:
-		static Input* sInstance;
+		static Scope<Input> sInstance;
 	};
 }
