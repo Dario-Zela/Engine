@@ -34,6 +34,7 @@ namespace Engine
 		inline virtual void SetVecF4(const std::string& name, const glm::vec4& value) override { UploadUniformVecF4(name, value);}
 		inline virtual void SetVecF3(const std::string& name, const glm::vec3& value) override { UploadUniformVecF3(name, value);}
 		inline virtual void SetInt(const std::string& name, unsigned int value) override { UploadUniformInt(name, value); }
+		inline virtual void SetFloat(const std::string& name, float value) override { UploadUniformFloat(name, value); }
 
 	private:
 		std::string ReadFile(const std::string& filePath);

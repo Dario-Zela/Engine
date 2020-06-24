@@ -11,8 +11,8 @@ namespace Engine
 	struct Renderer2DStorage
 	{
 		Ref<VertexArray> VertexArray;
-		Ref<Shader> FlatColorShader;
-		Ref<Shader> TextureShader;
+		Ref<Shader> Shader;
+		Ref<Texture2D> WhiteTexture;
 	};
 
 	static Renderer2DStorage* sStorage;
@@ -49,10 +49,13 @@ namespace Engine
 
 		sStorage->VertexArray->SetIndexBuffer(indexBuffer);
 
-		sStorage->FlatColorShader = Shader::Create("assets/Shaders/FlatColor.glsl");
-		sStorage->TextureShader = Shader::Create("assets/Shaders/Texture.glsl");
-		sStorage->TextureShader->Bind();
-		sStorage->TextureShader->SetInt("uTexture", 0);
+		sStorage->Shader = Shader::Create("assets/Shaders/Texture.glsl");
+		sStorage->Shader->Bind();
+		sStorage->Shader->SetInt("uTexture", 0);
+
+		sStorage->WhiteTexture = Texture2D::Create(1, 1);
+		unsigned int data = 0xffffffff;
+		sStorage->WhiteTexture->SetData(&data);
 	}
 
 	void Renderer2D::Shutdown()
@@ -62,10 +65,8 @@ namespace Engine
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		sStorage->FlatColorShader->Bind();
-		sStorage->FlatColorShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
-		sStorage->TextureShader->Bind();
-		sStorage->TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
+		sStorage->Shader->Bind();
+		sStorage->Shader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
 
 	}
 
@@ -81,32 +82,34 @@ namespace Engine
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float rotation)
 	{
-		sStorage->FlatColorShader->Bind();
-		sStorage->FlatColorShader->SetVecF4("uColor", color);
-
+		sStorage->Shader->Bind();
+		sStorage->Shader->SetVecF4("uColor", color);
+		sStorage->WhiteTexture->Bind();
 		glm::mat4 tranform = glm::translate(glm::mat4(1.0f), position);
-		tranform = glm::rotate(tranform, glm::radians(rotation), glm::vec3(1.0f));
+		if (rotation != 0.0f)
+			tranform = glm::rotate(tranform, glm::radians(rotation), glm::vec3(0, 0, 1));
 		tranform = glm::scale(tranform, { size.x, size.y, 1.0f });
-		sStorage->FlatColorShader->SetMat4("uTransform", tranform);
-
+		sStorage->Shader->SetMat4("uTransform", tranform);
+		sStorage->Shader->SetFloat("uTexScale", 1.0f);
 		sStorage->VertexArray->Bind();
 		RenderCommand::DrawIndexed(sStorage->VertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float rotation)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& shade, float textureScale, float rotation)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture, rotation);
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, shade, textureScale, rotation);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float rotation)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& shade, float textureScale, float rotation)
 	{
-		sStorage->TextureShader->Bind();
-
+		sStorage->Shader->Bind();
+		sStorage->Shader->SetVecF4("uColor", shade);
 		glm::mat4 tranform = glm::translate(glm::mat4(1.0f), position);
-		tranform = glm::rotate(tranform, glm::radians(rotation), glm::vec3(1.0f));
+		if (rotation != 0.0f)
+			tranform = glm::rotate(tranform, glm::radians(rotation), glm::vec3(0, 0, 1));
 		tranform = glm::scale(tranform, { size.x, size.y, 1.0f });
-		sStorage->TextureShader->SetMat4("uTransform", tranform);
-
+		sStorage->Shader->SetMat4("uTransform", tranform);
+		sStorage->Shader->SetFloat("uTexScale", textureScale);
 		texture->Bind(0);
 
 		sStorage->VertexArray->Bind();

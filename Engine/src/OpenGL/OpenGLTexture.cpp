@@ -5,6 +5,16 @@
 
 namespace Engine 
 {
+	OpenGLTexture2D::OpenGLTexture2D(unsigned int width, unsigned int height)
+		:mWidth(width),	mHeight(height)
+	{
+		glCreateTextures(GL_TEXTURE_2D, 1, &mRedererID);
+		glTextureStorage2D(mRedererID, 1, GL_RGBA8, mWidth, mHeight);
+
+		glTextureParameteri(mRedererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(mRedererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		:mPath(path)
 	{
@@ -43,6 +53,11 @@ namespace Engine
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &mRedererID);
+	}
+
+	void OpenGLTexture2D::SetData(void* data)
+	{
+		glTextureSubImage2D(mRedererID, 0, 0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_INT, data);
 	}
 
 	void OpenGLTexture2D::Bind(unsigned int textureSlot) const

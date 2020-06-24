@@ -10,7 +10,7 @@ namespace Engine
 		switch (Renderer::GetCurrenAPI())
 		{
 		case RendererAPI::API::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
-		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		default:
 			break;
 		}
@@ -23,7 +23,7 @@ namespace Engine
 		switch (Renderer::GetCurrenAPI())
 		{
 		case RendererAPI::API::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
-		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(filePath);
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>(filePath);
 		default:
 			break;
 		}
