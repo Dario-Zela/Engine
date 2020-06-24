@@ -94,10 +94,17 @@ namespace Engine
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
-			result.resize(in.tellg());
-			in.seekg(0, std::ios::beg);
-			in.read(&result[0], result.size());
-			in.close();
+			if (in.tellg() != -1)
+			{
+				result.resize(in.tellg());
+				in.seekg(0, std::ios::beg);
+				in.read(&result[0], result.size());
+				in.close();
+			}
+			else
+			{
+				EN_CORE_ERROR("Couldn't read from the file at {0}", filePath);
+			}
 		}
 		else
 		{
@@ -134,8 +141,8 @@ namespace Engine
 	{
 		// Get a program object.
 		GLuint program = glCreateProgram();
-		EN_CORE_ASSERT(shaderSources.size() < 5, "Too many shaders being uploaded at once");
-		std::array<GLenum, 5> glShaderIds;
+		EN_CORE_ASSERT(shaderSources.size() < 3, "Too many shaders being uploaded at once");
+		std::array<GLenum, 2> glShaderIds;
 		int shaderIndex = 0;
 		for (auto [key, value] : shaderSources)
 		{

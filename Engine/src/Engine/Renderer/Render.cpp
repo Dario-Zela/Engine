@@ -1,7 +1,7 @@
 #include "ENPH.h"
 #include "Render.h"
 #include "OpenGL/OpenGLShader.h"
-#include "Renderer2D.h"
+#include "Engine/Renderer/Renderer2D.h"
 
 namespace Engine 
 {
@@ -18,6 +18,11 @@ namespace Engine
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
+	}
+
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		sSceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
@@ -26,8 +31,8 @@ namespace Engine
 	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform)
 	{
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("uViewProjection", sSceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("uTransform", transform);
+		shader->SetMat4("uViewProjection", sSceneData->ViewProjectionMatrix);
+		shader->SetMat4("uTransform", transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}

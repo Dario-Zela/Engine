@@ -1,19 +1,15 @@
 #pragma once
-
-#include "Core.h"
+#include "Engine/Core/Core.h"
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/EventController.h"
 #include "Engine/Core/LayerStack.h"
-#include "Window.h"
+#include "Engine/Core/Window.h"
 
 #include "Engine/Core/TimeStep.h"
 
 #include "Engine/ImGUI/ImGUILayer.h"
-#include "Engine/Renderer/Shader.h"
-#include "Engine/Renderer/Buffer.h"
-#include "Engine/Renderer/VertexArray.h"
-#include "Engine/Renderer/OrthographicCamera.h"
+#include "Engine/Renderer/Render.h"
 
 namespace Engine 
 {
@@ -21,7 +17,7 @@ namespace Engine
 	{
 	public:
 		Application();
-		virtual ~Application() = default;
+		virtual ~Application() { Renderer::Shutdown(); }
 
 		void OnEvent(Event& e);
 		void Run();

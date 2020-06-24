@@ -10,6 +10,7 @@ namespace Engine
 	public:
 		static void Init();
 		static void OnWindowResise(unsigned int width, unsigned int height);
+		static void Shutdown();
 
 		static void BeginScene(OrthographicCamera& camera);
 		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform = glm::mat4(1.0f));

@@ -3,10 +3,6 @@
 
 namespace Engine
 {
-	LayerStack::LayerStack()
-	{
-	}
-
 	LayerStack::~LayerStack() 
 	{
 		for (Layer* layer : mLayers)

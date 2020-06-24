@@ -1,13 +1,11 @@
 #include "ENPH.h"
 #include "ImGUILayer.h"
 
-#include "imgui.h"
-#include "Engine/Core/KeyCodes.h"
-#include "Engine/Core/MouseCodes.h"
+#include <imgui.h>
 #include "Engine/Core/Application.h"
 
-#include "examples/imgui_impl_opengl3.h"
-#include "examples/imgui_impl_glfw.h"
+#include <examples/imgui_impl_opengl3.h>
+#include <examples/imgui_impl_glfw.h>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>

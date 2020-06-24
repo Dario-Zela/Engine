@@ -1,8 +1,8 @@
 #include "ENPH.h"
 #include "Application.h"
-#include "Input.h"
+#include "Engine/Core/Input.h"
 #include "Engine/Renderer/Render.h"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 namespace Engine
 { 
@@ -46,9 +46,9 @@ namespace Engine
 		dispatcher.Dispatch<WindowClosedEvent>(EN_BIND_EVENT_FN(Application::OnWindowClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(EN_BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (auto it = mLayerStack.end(); it != mLayerStack.begin();)
+		for (auto it = mLayerStack.rbegin(); it != mLayerStack.rend(); it++)
 		{
-			(*--it)->OnEvent(e);
+			(*it)->OnEvent(e);
 			if (e.IsHandled())
 				break;
 		}

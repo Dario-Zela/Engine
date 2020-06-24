@@ -14,9 +14,9 @@ namespace Engine
 		EN_CORE_ERROR("GLFW Error [{0}]: {1} ", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props) 
+	Scope<Window> Window::Create(const WindowProps& props) 
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -44,6 +44,10 @@ namespace Engine
 			EN_CORE_ASSERT(Success, "Could not initialise GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
+
+		#ifdef EN_DEBUG
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		#endif // EN_DEBUG
 
 		mWindow = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
 		++sGLFWWindowCount;
