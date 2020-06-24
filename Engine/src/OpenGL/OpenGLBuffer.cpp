@@ -8,6 +8,13 @@ namespace Engine
 	//VERTEX BUFFER//////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(unsigned int size)
+	{
+		glCreateBuffers(1, &mRenderID);
+		glBindBuffer(GL_ARRAY_BUFFER, mRenderID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(unsigned int size, float* vertecies)
 	{
 		glCreateBuffers(1, &mRenderID);
@@ -29,6 +36,12 @@ namespace Engine
 	void OpenGLVertexBuffer::Unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void OpenGLVertexBuffer::SetData(const void* data, unsigned int size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, mRenderID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,18 +1,19 @@
 #type vertex
 #version 330 core
 		
-layout(location = 0) in vec3 aPosition;
+layout(location = 0) in vec4 aPosition;
 layout(location = 1) in vec2 aTexCoord;
-		
-uniform mat4 uTransform;
+layout(location = 2) in vec4 aColor;
+	
 uniform mat4 uViewProjection;
 
 out vec2 vTexCoords;
-
+out vec4 vColor;
 void main()
 {
 	vTexCoords = aTexCoord;
-	gl_Position = uViewProjection * uTransform * vec4(aPosition, 1.0);
+	vColor = aColor;
+	gl_Position = uViewProjection * aPosition;
 }
 
 #type fragment
@@ -21,11 +22,12 @@ void main()
 layout(location = 0) out vec4 color;
 
 in vec2 vTexCoords;
-uniform vec4 uColor;
-uniform sampler2D uTexture;
-uniform float uTexScale;
+in vec4 vColor;
+//uniform sampler2D uTexture;
+//uniform float uTexScale;
 
 void main()
 {
-	color = texture(uTexture, vTexCoords * uTexScale) * uColor;
+	//color = texture(uTexture, vTexCoords * uTexScale) * vColor;
+	color = vColor;
 }

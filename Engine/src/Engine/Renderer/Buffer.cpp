@@ -6,6 +6,19 @@
 
 namespace Engine
 {
+	Ref<VertexBuffer> VertexBuffer::Create(unsigned int size)
+	{
+		switch (Renderer::GetCurrenAPI())
+		{
+		case RendererAPI::API::None: EN_CORE_ASSERT(false, "No Renderer API has been selected"); return nullptr;
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLVertexBuffer>(size);
+		default:
+			break;
+		}
+		EN_CORE_ASSERT(false, "Unknown RenderAPI");
+		return nullptr;
+	}
+
 	Ref<VertexBuffer> VertexBuffer::Create(unsigned int size, float* vertecies)
 	{
 		switch (Renderer::GetCurrenAPI())
