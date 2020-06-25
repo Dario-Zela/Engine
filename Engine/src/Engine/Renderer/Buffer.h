@@ -8,7 +8,7 @@ namespace Engine
 		VecI2, VecI3, VecI4,
 		MatF2, MatF3, MatF4,
 		MatI2, MatI3, MatI4,
-		Bool,
+		Bool, Float, Int
 	};
 
 	static unsigned int ShaderDataTypeSize(ShaderDataType type)
@@ -28,6 +28,8 @@ namespace Engine
 		case ShaderDataType::MatI2: return 16;
 		case ShaderDataType::MatI3: return 36;
 		case ShaderDataType::MatI4: return 64;
+		case ShaderDataType::Float: return 4;
+		case ShaderDataType::Int: return 4;
 		case ShaderDataType::Bool: return 1;
 		}
 
@@ -70,6 +72,8 @@ namespace Engine
 			case ShaderDataType::MatI2: return 4;
 			case ShaderDataType::MatI3: return 8;
 			case ShaderDataType::MatI4: return 16;
+			case ShaderDataType::Int: return 1;
+			case ShaderDataType::Float: return 1;
 			case ShaderDataType::Bool: return 1;
 			}
 

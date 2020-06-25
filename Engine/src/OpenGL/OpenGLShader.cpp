@@ -87,6 +87,12 @@ namespace Engine
 		glUniform1i(location, value);
 	}
 
+	void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, unsigned int count)
+	{
+		GLint location = glGetUniformLocation(mRendererID, name.c_str());
+		glUniform1iv(location, count, values);
+	}
+
 	std::string OpenGLShader::ReadFile(const std::string& filePath)
 	{
 		std::string result;

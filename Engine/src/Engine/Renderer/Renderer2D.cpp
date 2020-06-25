@@ -13,6 +13,8 @@ namespace Engine
 		glm::vec4 position;
 		glm::vec2 texCoord;
 		glm::vec4 color;
+		float textIndex;
+		float textureScale;
 	};
 
 	struct Renderer2DStorage
@@ -20,15 +22,17 @@ namespace Engine
 		const unsigned int MaxQuads = 10000;
 		const unsigned int MaxVerteces = MaxQuads * 4;
 		const unsigned int MaxIndeces= MaxQuads * 6;
+		static const unsigned int MaxTextureSlots = 32;
 
 		Ref<VertexArray> QuadVA;
 		Ref<VertexBuffer> QuadVB;
 		Ref<Shader> Shader;
-		Ref<Texture2D> WhiteTexture;
 
 		unsigned int QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		unsigned int TextureIndex = 1;//Where 0 is the WhiteTexture;
 	};
 
 	static Renderer2DStorage sStorage;
@@ -42,7 +46,9 @@ namespace Engine
 			{
 				{ "aPosition", ShaderDataType::VecF4},
 				{ "aTexCoord", ShaderDataType::VecF2},
-				{ "aColor", ShaderDataType::VecF4}
+				{ "aColor", ShaderDataType::VecF4},
+				{"aTexIndex", ShaderDataType::Float},
+				{"aTexScale", ShaderDataType::Float}
 			};
 
 			sStorage.QuadVB->SetLayout(layout);
@@ -74,11 +80,17 @@ namespace Engine
 
 		sStorage.Shader = Shader::Create("assets/Shaders/Texture.glsl");
 		sStorage.Shader->Bind();
-		//sStorage.Shader->SetInt("uTexture", 0);
 
-		//sStorage.WhiteTexture = Texture2D::Create(1, 1);
-		//unsigned int data = 0xffffffff;
-		//sStorage.WhiteTexture->SetData(&data);
+		int samplers[sStorage.MaxTextureSlots];
+		for (int i = 0; i < sStorage.MaxTextureSlots; i++)
+			samplers[i] = i;
+
+		sStorage.Shader->SetIntArray("uTexture", samplers, sStorage.MaxTextureSlots);
+
+		Ref<Texture2D> whiteTex = Texture2D::Create(1, 1);
+		unsigned int data = 0xffffffff;
+		whiteTex->SetData(&data);
+		sStorage.TextureSlots[0] = whiteTex;
 	}
 
 	void Renderer2D::Shutdown()
@@ -90,6 +102,7 @@ namespace Engine
 		sStorage.Shader->Bind();
 		sStorage.Shader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
 
+		sStorage.TextureIndex = 1;
 		sStorage.QuadIndexCount = 0;
 		sStorage.QuadVertexBufferPtr = sStorage.QuadVertexBufferBase;
 	}
@@ -103,6 +116,10 @@ namespace Engine
 
 	void Renderer2D::Flush()
 	{
+		for (unsigned int i = 0; i < sStorage.TextureIndex; i++)
+		{
+			sStorage.TextureSlots[i]->Bind(i);
+		}
 		RenderCommand::DrawIndexed(sStorage.QuadVA, sStorage.QuadIndexCount);
 	}
 
@@ -113,29 +130,44 @@ namespace Engine
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float rotation)
 	{
-		//You can make it all into 1 to two multiplictions.
-		glm::mat4 tranform = glm::mat4(1.0f);
+		glm::mat4 tranform = glm::translate(glm::mat4(1.0f), position);
 		if (rotation != 0.0f)
 			tranform = glm::rotate(tranform, glm::radians(rotation), glm::vec3(0, 0, 1));
+		tranform = glm::scale(tranform, { size.x, size.y, 1.0f });
 
-		sStorage.QuadVertexBufferPtr->position = tranform * glm::vec4(position, 1.0f);
+		glm::mat4 positions = glm::mat4(-0.5f, -0.5f, 0.0f, 1.0f,
+										 0.5f, -0.5f, 0.0f, 1.0f,
+										 0.5f,  0.5f, 0.0f, 1.0f,
+										-0.5f,  0.5f, 0.0f, 1.0f);
+		
+		positions = tranform * positions;
+
+		sStorage.QuadVertexBufferPtr->position = positions[0];
 		sStorage.QuadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
 		sStorage.QuadVertexBufferPtr->color = color;
+		sStorage.QuadVertexBufferPtr->textIndex = 0.0f;
+		sStorage.QuadVertexBufferPtr->textureScale = 1.0f;
 		sStorage.QuadVertexBufferPtr++;
 
-		sStorage.QuadVertexBufferPtr->position = tranform * glm::vec4(position.x + size.x, position.y, position.z, 1.0f );
+		sStorage.QuadVertexBufferPtr->position = positions[1];
 		sStorage.QuadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
 		sStorage.QuadVertexBufferPtr->color = color;
+		sStorage.QuadVertexBufferPtr->textIndex = 0.0f;
+		sStorage.QuadVertexBufferPtr->textureScale = 1.0f;
 		sStorage.QuadVertexBufferPtr++;
 
-		sStorage.QuadVertexBufferPtr->position = tranform * glm::vec4(position.x + size.x, position.y + size.y, position.z, 1.0f );
+		sStorage.QuadVertexBufferPtr->position = positions[2];
 		sStorage.QuadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
 		sStorage.QuadVertexBufferPtr->color = color;
+		sStorage.QuadVertexBufferPtr->textIndex = 0.0f;
+		sStorage.QuadVertexBufferPtr->textureScale = 1.0f;
 		sStorage.QuadVertexBufferPtr++;
 
-		sStorage.QuadVertexBufferPtr->position = tranform * glm::vec4(position.x, position.y + size.y, position.z, 1.0f );
+		sStorage.QuadVertexBufferPtr->position = positions[3];
 		sStorage.QuadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
 		sStorage.QuadVertexBufferPtr->color = color;
+		sStorage.QuadVertexBufferPtr->textIndex = 0.0f;
+		sStorage.QuadVertexBufferPtr->textureScale = 1.0f;
 		sStorage.QuadVertexBufferPtr++;
 
 		sStorage.QuadIndexCount += 6;
@@ -148,18 +180,65 @@ namespace Engine
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& shade, float textureScale, float rotation)
 	{
-		sStorage.Shader->Bind();
-		sStorage.Shader->SetVecF4("uColor", shade);
 		glm::mat4 tranform = glm::translate(glm::mat4(1.0f), position);
 		if (rotation != 0.0f)
 			tranform = glm::rotate(tranform, glm::radians(rotation), glm::vec3(0, 0, 1));
 		tranform = glm::scale(tranform, { size.x, size.y, 1.0f });
-		sStorage.Shader->SetMat4("uTransform", tranform);
-		sStorage.Shader->SetFloat("uTexScale", textureScale);
-		texture->Bind(0);
 
-		sStorage.QuadVA->Bind();
-		RenderCommand::DrawIndexed(sStorage.QuadVA);
+		glm::mat4 positions = glm::mat4(-0.5f, -0.5f, 0.0f, 1.0f,
+										 0.5f, -0.5f, 0.0f, 1.0f,
+										 0.5f,  0.5f, 0.0f, 1.0f,
+										-0.5f,  0.5f, 0.0f, 1.0f);
+
+		positions = tranform * positions;
+
+		float textureIndex = 0.0f;
+
+		for (unsigned int i = 0; i < sStorage.TextureIndex; i++)
+		{
+			if (*sStorage.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			textureIndex = (float)sStorage.TextureIndex;
+			sStorage.TextureSlots[sStorage.TextureIndex] = texture;
+			sStorage.TextureIndex++;
+		}
+
+		sStorage.QuadVertexBufferPtr->position = positions[0];
+		sStorage.QuadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
+		sStorage.QuadVertexBufferPtr->color = shade;
+		sStorage.QuadVertexBufferPtr->textIndex = textureIndex;
+		sStorage.QuadVertexBufferPtr->textureScale = textureScale;
+		sStorage.QuadVertexBufferPtr++;
+
+		sStorage.QuadVertexBufferPtr->position = positions[1];
+		sStorage.QuadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
+		sStorage.QuadVertexBufferPtr->color = shade;
+		sStorage.QuadVertexBufferPtr->textIndex = textureIndex;
+		sStorage.QuadVertexBufferPtr->textureScale = textureScale;
+		sStorage.QuadVertexBufferPtr++;
+
+		sStorage.QuadVertexBufferPtr->position = positions[2];
+		sStorage.QuadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
+		sStorage.QuadVertexBufferPtr->color = shade;
+		sStorage.QuadVertexBufferPtr->textIndex = textureIndex;
+		sStorage.QuadVertexBufferPtr->textureScale = textureScale;
+		sStorage.QuadVertexBufferPtr++;
+
+		sStorage.QuadVertexBufferPtr->position = positions[3];
+		sStorage.QuadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
+		sStorage.QuadVertexBufferPtr->color = shade;
+		sStorage.QuadVertexBufferPtr->textIndex = textureIndex;
+		sStorage.QuadVertexBufferPtr->textureScale = textureScale;
+		sStorage.QuadVertexBufferPtr++;
+
+		sStorage.QuadIndexCount += 6;
 	}
 
 }

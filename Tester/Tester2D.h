@@ -15,7 +15,7 @@ public:
 	virtual void OnDetach() override;
 private:
 	Engine::OrthographicCameraController mCameraController;
-	float num = 360.0f;
+	int num = 360;
 	Engine::Ref<Engine::VertexArray> mVertexArray;
 	Engine::Ref<Engine::Shader> mShader;
 	Engine::Ref<Engine::Texture2D> mTexture;

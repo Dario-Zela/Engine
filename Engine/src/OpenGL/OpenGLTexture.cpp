@@ -8,11 +8,11 @@ namespace Engine
 	OpenGLTexture2D::OpenGLTexture2D(unsigned int width, unsigned int height)
 		:mWidth(width),	mHeight(height)
 	{
-		glCreateTextures(GL_TEXTURE_2D, 1, &mRedererID);
-		glTextureStorage2D(mRedererID, 1, GL_RGBA8, mWidth, mHeight);
+		glCreateTextures(GL_TEXTURE_2D, 1, &mRendererID);
+		glTextureStorage2D(mRendererID, 1, GL_RGBA8, mWidth, mHeight);
 
-		glTextureParameteri(mRedererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(mRedererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(mRendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(mRendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
@@ -39,29 +39,29 @@ namespace Engine
 
 		EN_CORE_ASSERT(internalFormat, "Failed to recognise format");
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &mRedererID);
-		glTextureStorage2D(mRedererID, 1, internalFormat, mWidth, mHeight);
+		glCreateTextures(GL_TEXTURE_2D, 1, &mRendererID);
+		glTextureStorage2D(mRendererID, 1, internalFormat, mWidth, mHeight);
 		
-		glTextureParameteri(mRedererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(mRedererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(mRendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(mRendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureSubImage2D(mRedererID, 0, 0, 0, mWidth, mHeight, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(mRendererID, 0, 0, 0, mWidth, mHeight, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
-		glDeleteTextures(1, &mRedererID);
+		glDeleteTextures(1, &mRendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data)
 	{
-		glTextureSubImage2D(mRedererID, 0, 0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_INT, data);
+		glTextureSubImage2D(mRendererID, 0, 0, 0, mWidth, mHeight, GL_RGBA, GL_UNSIGNED_INT, data);
 	}
 
 	void OpenGLTexture2D::Bind(unsigned int textureSlot) const
 	{
-		glBindTextureUnit(textureSlot, mRedererID);
+		glBindTextureUnit(textureSlot, mRendererID);
 	}
 }

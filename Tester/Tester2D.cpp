@@ -13,7 +13,7 @@ void Tester2D::OnUpdate(Engine::TimeStep timeStep)
 	for(float i = 0; i < num; i += 0.5f)
 		Engine::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f }, i);
 	//Engine::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.8f,0.2f,0.8f, 1.0f }, 0.0f);
-	//Engine::Renderer2D::DrawQuad({ 0.0f , 0.0f , -0.1f }, { 10.0f, 10.0f }, mTexture, { 1.0f, 0.8f, 0.2f, 1.0f}, 100.0f, 10.0f);
+	Engine::Renderer2D::DrawQuad({ 0.0f , 0.0f , -0.1f }, { 10.0f, 10.0f }, mTexture, { 1.0f, 0.8f, 0.2f, 1.0f}, 100.0f, 10.0f);
 	Engine::Renderer2D::EndScene();
 }
 
@@ -23,7 +23,7 @@ void Tester2D::OnImGUIRender()
 {
 	Engine::ImGUI::Begin("Settings");
 	Engine::ImGUI::ColorEdit3("Color", glm::value_ptr(mColor));
-	Engine::ImGUI::DragFloat("Number", &num, 0.1f, 1.0f, 360.0f);
+	Engine::ImGUI::DragInt("Number", &num, 1.0f, 10, 10000);
 	Engine::ImGUI::End();
 }
 

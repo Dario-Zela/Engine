@@ -22,6 +22,8 @@ namespace Engine
 		case ShaderDataType::MatI2: return GL_INT;
 		case ShaderDataType::MatI3: return GL_INT;
 		case ShaderDataType::MatI4: return GL_INT;
+		case ShaderDataType::Float: return GL_FLOAT;
+		case ShaderDataType::Int: return GL_INT;
 		case ShaderDataType::Bool: return GL_BOOL;
 		}
 

@@ -11,6 +11,7 @@ namespace Engine
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
 		virtual void SetData(void* data) = 0;
+		virtual bool operator==(const Texture& other) const = 0;
 
 		virtual void Bind(unsigned int textureSlot = 0) const = 0;
 	};
